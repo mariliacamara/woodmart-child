@@ -1,6 +1,6 @@
 (function($){
   function moveCatToggles() {
-    $('.widget_product_categories .product-categories li.cat-parent').each(function(){
+    $('.widget_product_categories .product-categories li, .wd-product-category-filter .product-categories li').each(function(){
       var $li = $(this);
       var $toggle = $li.find('> .wd-cats-toggle').first();
       var $link = $li.find('> a').first();
@@ -25,11 +25,20 @@
     }, 300);
   });
 
-  // opcional: também ouve evento do tema (se existir)
+  // Reaplica após as atualizações AJAX suportadas pelo Woodmart 8.5.x.
   if (typeof woodmartThemeModule !== 'undefined') {
-    woodmartThemeModule.$document.on('wdShopPageInit wdBackHistory', moveCatToggles);
+    woodmartThemeModule.$document.on(
+      'wdShopPageInit wdBackHistory wdProductsTabsLoaded wdLoadMoreLoadProducts wdArrowsLoadProducts',
+      moveCatToggles
+    );
   }
 })(jQuery);
+
+document.addEventListener('DOMContentLoaded', function() {
+    document
+        .querySelector('.woocommerce-MyAccount-content.wd-grid-col')
+        ?.removeAttribute('style');
+});
 
 document.addEventListener("DOMContentLoaded", () => {
   document

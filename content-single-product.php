@@ -3,7 +3,7 @@ defined( 'ABSPATH' ) || exit;
 global $product;
 ?>
 
-<div id="product-<?php the_ID(); ?>" <?php wc_product_class( '', $product ); ?>>
+<div id="product-<?php the_ID(); ?>" <?php wc_product_class( 'single-product-content', $product ); ?>>
 
   <!-- Breadcrumb -->
   <div class="wd-breadcrumbs-wrap container">
@@ -16,26 +16,30 @@ global $product;
     <?php endif; ?>
   </div>
 
-  <div class="wd-product-top container">
+  <div class="wd-product-top product-image-summary-wrap container wd-grid-g"
+    style="--wd-col-lg: 12; --wd-gap-lg: 30px; --wd-gap-sm: 20px;">
 
-    <div class="row wd-product-main">
+    <div class="row wd-product-main product-image-summary product-image-summary-inner wd-grid-g wd-grid-col"
+      style="--wd-col-lg: 12; --wd-gap-lg: 30px; --wd-gap-sm: 20px;">
 
       <!-- LEFT: Gallery -->
-      <div class="col-lg-6 wd-product-gallery-col">
+      <div class="col-lg-6 wd-product-gallery-col product-images wd-grid-col"
+        style="--wd-col-lg: 6; --wd-col-md: 6; --wd-col-sm: 12;">
         <div class="wd-product-gallery">
           <?php do_action( 'woocommerce_before_single_product_summary' ); ?>
 
           <?php if ( ! $product->is_in_stock() ) : ?>
           <div class="oos-svg-badge" aria-hidden="true">
-            <?php echo file_get_contents( get_stylesheet_directory() . '/assets/icons/outofstock.svg' ); ?>
+            <img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/assets/icons/outofstock.svg' ); ?>" alt="">
           </div>
           <?php endif; ?>
         </div>
       </div>
 
       <!-- RIGHT: Summary -->
-      <div class="col-lg-6 wd-product-summary-col">
-        <div class="wd-summary-inner">
+      <div class="col-lg-6 wd-product-summary-col summary entry-summary wd-grid-col"
+        style="--wd-col-lg: 6; --wd-col-md: 6; --wd-col-sm: 12;">
+        <div class="wd-summary-inner summary-inner">
 
           <?php
             // BRAND NAME acima do título + logo ao lado (robusto)
@@ -155,9 +159,9 @@ global $product;
             $count = (int) $product->get_rating_count();
 
             echo '<div class="my-rating-inner">';
-            echo wc_get_rating_html( $avg );
+            echo wp_kses_post( wc_get_rating_html( $avg ) );
             if ( $count > 0 ) {
-                echo '<span class="count">(' . $count . ')</span>';
+                echo '<span class="count">(' . esc_html( $count ) . ')</span>';
             }
             echo '</div>';
             ?>
@@ -167,9 +171,9 @@ global $product;
           <div class="wd-delivery">
             <?php
             if ( function_exists( 'woodmart_get_shipping_text' ) ) {
-              echo woodmart_get_shipping_text();
+              echo wp_kses_post( woodmart_get_shipping_text() );
             } else {
-              echo '<span>Entrega entre 24h a 48h para Portugal continental.</span>';
+              echo '<span>' . esc_html__( 'Entrega entre 24h a 48h para Portugal continental.', 'zincomed-child' ) . '</span>';
             }
             ?>
           </div>
@@ -192,7 +196,7 @@ global $product;
 
             if ( $manages_stock && $stock_qty !== null && $stock_qty <= 3 && $stock_qty > 0 ) : ?>
               <div class="low-stock-warning">
-                Baixo stock
+                <?php echo esc_html__( 'Baixo stock', 'zincomed-child' ); ?>
               </div>
             <?php endif; ?>
           </div>
@@ -206,14 +210,14 @@ global $product;
             $sku = $product->get_sku();
 
             if ( $sku ) {
-                echo '<div class="product-sku"><strong>REF:</strong> ' . esc_html( $sku ) . '</div>';
+                echo '<div class="product-sku"><strong>' . esc_html__( 'REF:', 'zincomed-child' ) . '</strong> ' . esc_html( $sku ) . '</div>';
             }
 
             // categorias do produto
             $categories = wc_get_product_category_list( $product->get_id(), ', ' );
 
             if ( $categories ) {
-                echo '<div class="product-category"><strong>Categoria:</strong> ' . $categories . '</div>';
+                echo '<div class="product-category"><strong>' . esc_html__( 'Categoria:', 'zincomed-child' ) . '</strong> ' . wp_kses_post( $categories ) . '</div>';
             }
             ?>
           </div>
@@ -233,297 +237,46 @@ global $product;
   </section>
 
   <section class="related-products wd-related-products container">
-    <h2 class="wd-related-title">PRODUTOS RELACIONADOS</h2>
+    <h2 class="wd-related-title"><?php echo esc_html__( 'PRODUTOS RELACIONADOS', 'zincomed-child' ); ?></h2>
 
     <?php
-  $limit = 5;
-  // Prioriza cross-sells e upsells, depois produtos relacionados
-  $related_ids = array();
+    $limit       = 5;
+    $related_ids = array_merge( $product->get_cross_sell_ids(), $product->get_upsell_ids() );
 
-  // 1. Cross-sells
-  $cross_sell_ids = $product->get_cross_sell_ids();
-  if ( ! empty( $cross_sell_ids ) ) {
-      $related_ids = array_merge( $related_ids, $cross_sell_ids );
-  }
+    if ( count( $related_ids ) < $limit ) {
+      $related_ids = array_merge(
+        $related_ids,
+        wc_get_related_products( $product->get_id(), $limit - count( $related_ids ), $related_ids )
+      );
+    }
 
-  // 2. Upsells
-  $upsell_ids = $product->get_upsell_ids();
-  if ( ! empty( $upsell_ids ) ) {
-      $related_ids = array_merge( $related_ids, $upsell_ids );
-  }
+    $related_ids = array_slice( array_unique( array_map( 'absint', $related_ids ) ), 0, $limit );
 
-  // 3. Produtos relacionados (se ainda não tiver o suficiente)
-  if ( count( $related_ids ) < $limit ) {
-      $remaining = $limit - count( $related_ids );
-      $auto_related = wc_get_related_products( $product->get_id(), $remaining );
-      $related_ids = array_merge( $related_ids, $auto_related );
-  }
-
-  // Remove duplicados e limita ao número desejado
-  $related_ids = array_unique( $related_ids );
-  $related_ids = array_slice( $related_ids, 0, $limit );
-
-
-  if ( ! empty( $related_ids ) ) :
-
-    $carousel_id = 'carousel-related-' . wp_unique_id();
-
-    $args = array(
-      'post_type'      => 'product',
-      'post__in'       => $related_ids,
-      'orderby'        => 'post__in',
-      'posts_per_page' => $limit,
-    );
-
-    $loop = new WP_Query( $args );
-  ?>
-
-    <div id="<?php echo esc_attr( $carousel_id ); ?>"
-      class="wd-carousel-container wd-quantity-enabled slider-type-product products wd-carousel-spacing-10 title-line-one"
-      data-owl-carousel="" data-wrap="no" data-hide_pagination_control="no" data-hide_prev_next_buttons="no"
-      data-desktop="5" data-tablet_landscape="4" data-tablet="3" data-mobile="2">
-      <div
-        class="owl-carousel wd-owl owl-items-lg-5 owl-items-md-4 owl-items-sm-3 owl-items-xs-2 owl-loaded owl-drag product-carrousel">
-        <div class="owl-stage-outer">
-          <div class="owl-stage" style="transform: translate3d(0px, 0px, 0px); transition: all; width: 1202px;">
-            <?php while ( $loop->have_posts() ) : $loop->the_post(); ?>
-            <div class="owl-item active" style="width: 238.4px;">
-              <div class="slide-product owl-carousel-item">
-                <?php
-                  wc_get_template_part( 'content', 'product-related' );
-                ?>
-              </div>
-            </div>
-            <?php endwhile; ?>
-          </div>
-        </div>
-
-        <?php wp_reset_postdata(); ?>
-
-      </div>
-    </div>
-
-    <?php endif; ?>
+    if ( $related_ids && function_exists( 'woodmart_shortcode_products' ) ) {
+      echo woodmart_shortcode_products( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+        array(
+          'element_title'          => '',
+          'layout'                 => 'carousel',
+          'post_type'              => 'ids',
+          'include'                => implode( ',', $related_ids ),
+          'orderby'                => 'post__in',
+          'items_per_page'         => $limit,
+          'slides_per_view'        => 5,
+          'slides_per_view_tablet' => 3,
+          'slides_per_view_mobile' => 2,
+          'columns'                => 5,
+          'columns_tablet'         => 3,
+          'columns_mobile'         => 2,
+          'img_size'               => 'woocommerce_thumbnail',
+          'product_quantity'       => 'enable',
+          'spacing'                => 10,
+          'wrapper_classes'        => ' zincomed-related-products',
+          'query_post_type'        => array( 'product', 'product_variation' ),
+        )
+      );
+    }
+    ?>
   </section>
 
 
 </div>
-
-<script>
-(function() {
-  const SELECT_SELECTOR = 'select#pa_tamanho, select[name="attribute_pa_tamanho"]';
-  const FORM_SELECTOR = 'form.variations_form';
-
-  // util: remove tags HTML
-  function stripHtml(html) {
-    const tmp = document.createElement('div');
-    tmp.innerHTML = html || '';
-    return tmp.textContent || tmp.innerText || '';
-  }
-
-  function getVariationsData(form) {
-    if (!form) return null;
-    const raw = form.getAttribute('data-product_variations') || form.dataset.productVariations || form.dataset
-      .product_variations;
-    if (!raw) return null;
-    try {
-      // raw pode estar JSON-escaped (com &quot;), tentar unescape
-      const jsonText = raw.trim();
-      // se começa com '[' então já é JSON
-      if (/^\s*\[/.test(jsonText)) {
-        return JSON.parse(jsonText);
-      } else {
-        // tentar substituir &quot; e depois parse
-        const unescaped = jsonText.replace(/&quot;/g, '"').replace(/&amp;/g, '&');
-        return JSON.parse(unescaped);
-      }
-    } catch (e) {
-      console.warn('Could not parse product_variations JSON', e);
-      return null;
-    }
-  }
-
-  function buildOptions(select, variations) {
-    if (!select) return null;
-    if (select.dataset.converted === '1') return null;
-    select.dataset.converted = '1';
-    select.classList.add('size-converter-select');
-
-    const container = document.createElement('div');
-    container.className = 'size-options';
-
-    Array.from(select.options).forEach((opt) => {
-      const val = opt.value;
-      let text = opt.textContent.trim();
-      if (!val) return; // placeholder
-
-      // achar variação correspondente nas variations (matching attribute_pa_tamanho)
-      let priceText = '';
-      if (variations && Array.isArray(variations)) {
-        const found = variations.find(v => {
-          if (!v.attributes) return false;
-          // várias formas de key; preferimos attribute_pa_tamanho
-          return v.attributes['attribute_pa_tamanho'] === val || v.attributes['attribute_tamanho'] === val ||
-            v.attributes['attribute_pa_tamanho'] === val.replace(/\s+/g, '-');
-        });
-        if (found) {
-          // price_html sometimes like '<span class="price">3.57€</span>'
-          if (found.price_html) priceText = stripHtml(found.price_html).trim();
-          else if (typeof found.display_price !== 'undefined') {
-            // número: formatar com 2 decimais + símbolo euro
-            priceText = Number(found.display_price).toFixed(2) + '€';
-          }
-        }
-      }
-
-      // Atualiza texto do option para incluir preço (texto simples)
-      if (priceText) {
-        // evita duplicar se já tiver o preço
-        const baseText = opt.getAttribute('data-base-text') || text;
-        opt.setAttribute('data-base-text', baseText);
-        opt.text = baseText + ' — ' + priceText;
-      }
-
-      // label visual (contém input invisível + span com size + price)
-      const label = document.createElement('label');
-      label.className = 'size-label';
-      label.setAttribute('data-val', val);
-
-      const input = document.createElement('input');
-      input.type = 'radio';
-      input.name = 'product_size_converted';
-      input.value = val;
-
-      if (select.value === val) {
-        label.classList.add('is-checked');
-        input.checked = true;
-      }
-
-      const span = document.createElement('span');
-      span.className = 'size-text';
-      span.textContent = text;
-
-      // price element dentro do quadrado
-      const priceEl = document.createElement('small');
-      priceEl.className = 'size-price';
-      priceEl.textContent = priceText || '';
-
-      label.appendChild(input);
-      label.appendChild(span);
-      label.appendChild(priceEl);
-      container.appendChild(label);
-
-      label.addEventListener('click', function() {
-        if (!input.checked) input.checked = true;
-        select.value = val;
-        const evt = new Event('change', {
-          bubbles: true
-        });
-        select.dispatchEvent(evt);
-
-        container.querySelectorAll('.size-label').forEach(l => l.classList.remove('is-checked'));
-        label.classList.add('is-checked');
-      });
-    });
-
-    return container;
-  }
-
-  function placeBelowAddToCart(select) {
-    const form = document.querySelector(FORM_SELECTOR);
-    const variationsData = getVariationsData(form);
-    const targetBox = document.querySelector('.wd-variations-boxes') || (function() {
-      const addWrap = document.querySelector('.wd-add-to-cart-wrap');
-      if (addWrap && addWrap.parentNode) {
-        const fallback = document.createElement('div');
-        fallback.className = 'wd-variations-boxes';
-        addWrap.parentNode.insertBefore(fallback, addWrap.nextSibling);
-        return fallback;
-      }
-      return document.body;
-    })();
-
-    // limpa se já houver
-    targetBox.querySelectorAll('.size-label-row, .size-options, .reset-wrapper').forEach(n => n.remove());
-
-    const labelText = (() => {
-      const origTh = select.closest('tr') ? select.closest('tr').querySelector('th.label.cell') : null;
-      return origTh ? origTh.textContent.trim() : 'Opção';
-    })();
-
-    const labelRow = document.createElement('div');
-    labelRow.className = 'size-label-row';
-    labelRow.textContent = labelText;
-
-    const container = buildOptions(select, variationsData);
-    if (!container) return;
-
-    // reset link handling (clona)
-    const origTr = select.closest('tr');
-    const resetOriginal = origTr ? origTr.querySelector('.wd-reset-var .reset_variations') : null;
-    let resetWrapper = null;
-    if (resetOriginal) {
-      const clone = resetOriginal.cloneNode(true);
-      clone.style.visibility = resetOriginal.style.visibility || 'hidden';
-      clone.addEventListener('click', function() {
-        setTimeout(() => {
-          container.querySelectorAll('.size-label').forEach(l => l.classList.remove('is-checked'));
-        }, 50);
-      });
-      resetWrapper = document.createElement('div');
-      resetWrapper.className = 'reset-wrapper';
-      resetWrapper.appendChild(clone);
-    }
-
-    targetBox.appendChild(labelRow);
-    targetBox.appendChild(container);
-    if (resetWrapper) targetBox.appendChild(resetWrapper);
-
-    // esconder origem
-    if (origTr) origTr.style.display = 'none';
-
-    // sincronia quando select muda (por WooCommerce)
-    select.addEventListener('change', function() {
-      const v = select.value;
-      container.querySelectorAll('.size-label').forEach(l => {
-        const inp = l.querySelector('input');
-        if (l.getAttribute('data-val') === v) {
-          l.classList.add('is-checked');
-          if (inp) inp.checked = true;
-        } else {
-          l.classList.remove('is-checked');
-          if (inp) inp.checked = false;
-        }
-      });
-
-      if (resetOriginal) resetOriginal.style.visibility = select.value ? 'visible' : 'hidden';
-    });
-
-    // inicial: atualiza reset visibility
-    if (resetOriginal) resetOriginal.style.visibility = select.value ? 'visible' : 'hidden';
-  }
-
-  function init() {
-    const select = document.querySelector(SELECT_SELECTOR);
-    if (!select) return;
-    placeBelowAddToCart(select);
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else init();
-
-  // observer caso WooCommerce re-renderize o select/form
-  const root = document.querySelector('form.variations_form') || document.body;
-  const mo = new MutationObserver(() => {
-    const sel = document.querySelector(SELECT_SELECTOR);
-    if (sel && sel.dataset.converted !== '1') {
-      placeBelowAddToCart(sel);
-    }
-  });
-  mo.observe(root, {
-    childList: true,
-    subtree: true
-  });
-})();
-</script>

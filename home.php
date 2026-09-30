@@ -3,6 +3,8 @@
  * Template Name: Blog Grid
  */
 
+defined( 'ABSPATH' ) || exit;
+
 get_header();
 ?>
 
@@ -11,13 +13,13 @@ get_header();
     <div class="site-content col-lg-12 col-md-12 col-sm-12" role="main">
 
       <?php
-      $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;
+      $paged = max( 1, absint( get_query_var( 'paged' ) ) );
 
-      $query = new WP_Query([
+      $query = new WP_Query( array(
         'post_type'      => 'post',
         'posts_per_page' => 9,
         'paged'          => $paged,
-      ]);
+      ) );
       ?>
 
       <?php if ($query->have_posts()) : ?>
@@ -38,8 +40,8 @@ get_header();
 									<a class="wd-fill" href="<?php the_permalink(); ?>"></a>
 
 									<div class="wd-post-date wd-style-with-bg">
-										<span class="post-date-day"><?php echo get_the_date('d'); ?></span>
-										<span class="post-date-month"><?php echo get_the_date('M'); ?></span>
+										<span class="post-date-day"><?php echo esc_html( get_the_date( 'd' ) ); ?></span>
+										<span class="post-date-month"><?php echo esc_html( get_the_date( 'M' ) ); ?></span>
 									</div>
 								</div>
 
@@ -55,16 +57,16 @@ get_header();
 
                   <div class="wd-post-meta">
                     <div class="wd-post-author">
-                      <span>Publicado por</span>
-                      <?php echo get_avatar(get_the_author_meta('ID'), 18); ?>
-                      <a href="<?php echo get_author_posts_url(get_the_author_meta('ID')); ?>" class="author">
+                      <span><?php echo esc_html__( 'Publicado por', 'zincomed-child' ); ?></span>
+                      <?php echo wp_kses_post( get_avatar( get_the_author_meta( 'ID' ), 18 ) ); ?>
+                      <a href="<?php echo esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ); ?>" class="author">
                         <?php the_author(); ?>
                       </a>
                     </div>
 
                     <div class="wd-modified-date">
-                      <time class="updated" datetime="<?php echo get_the_modified_date('c'); ?>">
-                        <?php echo get_the_modified_date(); ?>
+                      <time class="updated" datetime="<?php echo esc_attr( get_the_modified_date( 'c' ) ); ?>">
+                        <?php echo esc_html( get_the_modified_date() ); ?>
                       </time>
                     </div>
                   </div>
@@ -84,16 +86,16 @@ get_header();
 
         <div class="wd-pagination">
           <?php
-          echo paginate_links([
+          echo wp_kses_post( paginate_links( array(
             'total' => $query->max_num_pages,
-          ]);
+          ) ) );
           ?>
         </div>
 
         <?php wp_reset_postdata(); ?>
 
       <?php else : ?>
-        <p>Nenhum post encontrado.</p>
+        <p><?php echo esc_html__( 'Nenhum post encontrado.', 'zincomed-child' ); ?></p>
       <?php endif; ?>
 
     </div>

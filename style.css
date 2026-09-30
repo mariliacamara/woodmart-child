@@ -4,9 +4,31 @@ Theme URI:  https://www.wpserveur.net
 Author:     WPServeur
 Author URI: https://www.wpserveur.net
 Template:   woodmart
-Version:    1.0
+Description: Child theme da Zincomed migrado para Woodmart 8.5.x.
+Version:    2.0.13
+Text Domain: zincomed-child
 License:    GNU General Public License v2 or later
 */
+
+/* Woodmart 8.5.x product and carousel structure. */
+.wd-carousel .wd-product,
+.wd-carousel .wd-product-wrapper {
+  height: 100%;
+}
+
+.wd-carousel .wd-product-wrapper,
+.wd-carousel .wd-product-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.wd-carousel .wd-product-content {
+  flex: 1;
+}
+
+.wd-carousel .product-cta-row {
+  margin-top: auto;
+}
 
 /* -------------------------
    Variáveis globais
@@ -1424,11 +1446,11 @@ div.product-excerpt {
 
 /* CARD CONTAINER */
 .product-carrousel .owl-item .owl-carousel-item .products .product-grid-item.product,
-.product-carrousel .owl-item .owl-carousel-item .woocommerce ul.products li.product,
+.product-carrousel .owl-item .owl-carousel-item .woocommerce ul.products .product,
 .wd-products-element .products .product-grid-item.product,
-.wd-products-element .woocommerce ul.products li.product,
+.wd-products-element .woocommerce ul.products .product,
 .pagination-pagination .products .product-grid-item.product,
-.pagination-pagination .woocommerce ul.products li.product {
+.pagination-pagination .woocommerce ul.products .product {
   display: flex !important;
   flex-direction: column !important;
   align-items: stretch !important;
@@ -2317,8 +2339,8 @@ a.glink img {
 }
 
 
-/* FORÇA o :before e mostra um box de debug — cole no final do CSS (custom CSS) */
-.wd-wishlist-icon>a::before {
+/* Ícone personalizado de favoritos na estrutura atual do Woodmart. */
+.wd-product .wd-wishlist-icon > a .wd-action-icon::before {
   content: "" !important;
   /* força existir (substitui content:none) */
   display: inline-block !important;
@@ -2340,8 +2362,9 @@ a.glink img {
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
 }
 
-.wd-wishlist-icon>a.is-active::before,
-.wd-wishlist-icon>a.added::before {
+.wd-product .wd-wishlist-icon > a.is-active .wd-action-icon::before,
+.wd-product .wd-wishlist-icon > a.added .wd-action-icon::before,
+.wd-product .wd-wishlist-icon.wd-added > a .wd-action-icon::before {
   /* garante que o pseudo exista e tenha dimensões */
   content: "" !important;
   display: inline-block !important;
@@ -2373,7 +2396,7 @@ a.glink img {
 }
 
 /* Cada item ocupa ~25% menos o gap */
-.woocommerce-MyAccount-content .wd-products-holder.elements-grid>li.product-grid-item {
+.woocommerce-MyAccount-content .wd-products-holder.elements-grid>.product-grid-item {
   flex: 0 0 calc(25% - 4px) !important;
   /* 25% minus half the gap */
   width: calc(25% - 4px) !important;
@@ -2383,7 +2406,7 @@ a.glink img {
 }
 
 /* Ajustes internos dos cards (garante que expansões não quebrem a linha) */
-.woocommerce-MyAccount-content .wd-products-holder.elements-grid>li .product-wrapper {
+.woocommerce-MyAccount-content .wd-products-holder.elements-grid>.product .product-wrapper {
   height: 100% !important;
   display: flex !important;
   flex-direction: column !important;
@@ -2392,14 +2415,14 @@ a.glink img {
 
 /* Responsivo: 2 por linha em tablet, 1 por linha em mobile */
 @media (max-width: 992px) {
-  .woocommerce-MyAccount-content .wd-products-holder.elements-grid>li.product-grid-item {
+  .woocommerce-MyAccount-content .wd-products-holder.elements-grid>.product-grid-item {
     flex: 0 0 calc(50% - 15px) !important;
     max-width: calc(50% - 15px) !important;
   }
 }
 
 @media (max-width: 480px) {
-  .woocommerce-MyAccount-content .wd-products-holder.elements-grid>li.product-grid-item {
+  .woocommerce-MyAccount-content .wd-products-holder.elements-grid>.product-grid-item {
     flex: 0 0 100% !important;
     max-width: 100% !important;
     margin: 0 !important;
@@ -3452,8 +3475,9 @@ div.woocommerce>div>div.woocommerce-MyAccount-content>form>button {
 /* container do label no canto */
 .product-grid-item .product-labels.labels-rectangular {
   position: absolute !important;
-  top: 0 !important;
-  right: 0 !important;
+  top: auto !important;
+  right: auto !important;
+  left: 100px !important;
   z-index: 50 !important;
   pointer-events: none;
 }
@@ -3673,17 +3697,17 @@ div.owl-stage-outer>div>div>div>li>div>div.product-element-bottom>div.product-ct
   max-height: 30px;
 }
 
-li.product-grid-item:not(.quick-shop-shown) .quick-shop-wrapper,
+.product-grid-item:not(.quick-shop-shown) .quick-shop-wrapper,
 .wd-product:not(.quick-shop-shown) .quick-shop-wrapper {
   display: none !important;
 }
 
 
-li.product-grid-item.outofstock .wd-add-btn.wd-add-btn-replace {
+.product-grid-item.outofstock .wd-add-btn.wd-add-btn-replace {
   justify-content: center !important;
 }
 
-li.product-grid-item.product-type-variable .wd-add-btn.wd-add-btn-replace {
+.product-grid-item.product-type-variable .wd-add-btn.wd-add-btn-replace {
   justify-content: center !important;
 }
 
@@ -3710,17 +3734,17 @@ li.product-grid-item.product-type-variable .wd-add-btn.wd-add-btn-replace {
 }
 
 /* ancora no card e corta o excesso */
-li.product-grid-item.is-outofstock {
+.product-grid-item.is-outofstock {
   position: relative;
 }
 
-li.product-grid-item.is-outofstock .product-wrapper {
+.product-grid-item.is-outofstock .product-wrapper {
   position: relative;
   overflow: hidden;
 }
 
 /* container do badge */
-li.product-grid-item.is-outofstock .oos-badge {
+.product-grid-item.is-outofstock .oos-badge {
   position: absolute;
   top: 0;
   right: 0;
@@ -3731,7 +3755,7 @@ li.product-grid-item.is-outofstock .oos-badge {
 }
 
 /* fundo em triângulo */
-li.product-grid-item.is-outofstock .oos-badge-bg {
+.product-grid-item.is-outofstock .oos-badge-bg {
   position: absolute;
   inset: 0;
   background: #000;
@@ -3739,7 +3763,7 @@ li.product-grid-item.is-outofstock .oos-badge-bg {
 }
 
 /* texto separado, diagonal "\" */
-li.product-grid-item.is-outofstock .oos-badge-text {
+.product-grid-item.is-outofstock .oos-badge-text {
   position: absolute;
   top: 18px;
   right: -10px;
@@ -3868,7 +3892,8 @@ h3.wc-bacs-bank-details-account-name {
   cursor: help;
 }
 
-.price-badge svg {
+.price-badge svg,
+.price-badge img {
   width: 100%;
   height: 100%;
 }
@@ -3893,7 +3918,8 @@ h3.wc-bacs-bank-details-account-name {
   cursor: help;
 }
 
-.price-badge svg {
+.price-badge svg,
+.price-badge img {
   width: 100%;
   height: 100%;
 }
@@ -3973,7 +3999,8 @@ h3.wc-bacs-bank-details-account-name {
   pointer-events: none;
 }
 
-.oos-svg-badge svg {
+.oos-svg-badge svg,
+.oos-svg-badge img {
   width: 100%;
   height: 100%;
   display: block;
@@ -3997,7 +4024,8 @@ h3.wc-bacs-bank-details-account-name {
   background: var(--black);
 }
 
-.product-grid-item.is-outofstock .oos-svg-badge svg {
+.product-grid-item.is-outofstock .oos-svg-badge svg,
+.product-grid-item.is-outofstock .oos-svg-badge img {
   width: 100%;
   height: 100%;
   display: block;
@@ -4021,7 +4049,8 @@ h3.wc-bacs-bank-details-account-name {
   z-index: 20;
 }
 
-.free-shipping-badge svg {
+.free-shipping-badge svg,
+.free-shipping-badge img {
   width: 100%;
   height: auto;
 }
@@ -4402,8 +4431,8 @@ p.price del~ins .woocommerce-Price-amount.amount {
 
 .wd-product-gallery .product-labels.labels-rectangular {
   position: absolute !important;
-  top: 0 !important;
-  right: 0 !important;
+  top: auto !important;
+  right: auto !important;
   z-index: 50 !important;
   pointer-events: none !important;
 }
@@ -4411,8 +4440,8 @@ p.price del~ins .woocommerce-Price-amount.amount {
 /* triângulo no canto superior DIREITO */
 .wd-product-gallery .product-labels.labels-rectangular .onsale.product-label {
   position: absolute !important;
-  top: 0 !important;
-  right: 20px !important;
+  top: auto !important;
+  right: auto !important;
 
   width: 100px !important;
   height: 100px !important;
@@ -4459,7 +4488,8 @@ p.price del~ins .woocommerce-Price-amount.amount {
 }
 
 /* SVG intacto */
-.single-product .wd-product-gallery .oos-svg-badge svg {
+.single-product .wd-product-gallery .oos-svg-badge svg,
+.single-product .wd-product-gallery .oos-svg-badge img {
   width: 100%;
   height: 100%;
   display: block;
@@ -4662,7 +4692,7 @@ body>div.website-wrapper>header>div>div.whb-row.whb-general-header.whb-sticky-ro
   }
 
   .pagination-pagination .products .product-grid-item.product,
-  .pagination-pagination .woocommerce ul.products li.product {
+  .pagination-pagination .woocommerce ul.products .product {
     flex: 0 0 calc(50% - 6px) !important;
     max-width: calc(50% - 6px) !important;
     width: calc(50% - 6px) !important;
@@ -4683,7 +4713,7 @@ body>div.website-wrapper>header>div>div.whb-row.whb-general-header.whb-sticky-ro
   }
 
   /* cada card */
-  .products.elements-grid.wd-products-holder>li.product-grid-item {
+  .products.elements-grid.wd-products-holder>.product-grid-item {
     width: auto !important;
     max-width: none !important;
     margin: 0 !important;
@@ -4733,7 +4763,7 @@ body>div.website-wrapper>header>div>div.whb-row.whb-general-header.whb-sticky-ro
     gap: 12px !important;
   }
 
-  .wd-related-grid>li.product-grid-item {
+  .wd-related-grid>.product-grid-item {
     width: auto !important;
     max-width: none !important;
     margin: 0 !important;
@@ -4741,8 +4771,8 @@ body>div.website-wrapper>header>div>div.whb-row.whb-general-header.whb-sticky-ro
 
   .product-grid-item .product-labels.labels-rectangular .onsale.product-label {
     position: absolute !important;
-    top: 0 !important;
-    right: -68px !important;
+    top: auto !important;
+    right: auto !important;
     width: 66px !important;
     height: 66px !important;
     background: #e11c1c !important;
@@ -4776,36 +4806,36 @@ body>div.website-wrapper>header>div>div.whb-row.whb-top-bar.whb-not-sticky-row.w
     height: 100%;
   }
 
-  .owl-carousel li.product-grid-item {
+  .owl-carousel .product-grid-item {
     height: 100%;
   }
 
-  .owl-carousel li.product-grid-item .product-wrapper {
+  .owl-carousel .product-grid-item .product-wrapper {
     height: 100%;
     display: flex;
     flex-direction: column;
   }
 
-  .owl-carousel li.product-grid-item .product-element-bottom {
+  .owl-carousel .product-grid-item .product-element-bottom {
     flex: 1;
     display: flex;
     flex-direction: column;
   }
 
   /* Joga o bloco de preço/CTA sempre pro fundo do card */
-  .owl-carousel li.product-grid-item .product-cta-row {
+  .owl-carousel .product-grid-item .product-cta-row {
     margin-top: auto;
   }
 
   /* Reserva espaço mesmo quando não tem preço (oos) */
-  .owl-carousel li.product-grid-item .product-cta-price {
+  .owl-carousel .product-grid-item .product-cta-price {
     min-height: 22px;
     /* ajusta se teu preço for maior */
   }
 
   /* Reserva a mesma “altura de CTA” pros cards com 1 botão (oos/variable) */
-  .owl-carousel li.product-grid-item.product-type-variable .wd-add-btn,
-  .owl-carousel li.product-grid-item.is-outofstock .wd-add-btn {
+  .owl-carousel .product-grid-item.product-type-variable .wd-add-btn,
+  .owl-carousel .product-grid-item.is-outofstock .wd-add-btn {
     min-height: 78px;
     /* equivalente ao bloco quantity+botão dos simples */
     display: flex;
@@ -4813,8 +4843,8 @@ body>div.website-wrapper>header>div>div.whb-row.whb-top-bar.whb-not-sticky-row.w
   }
 
   /* Faz o botão único ficar colado embaixo */
-  .owl-carousel li.product-grid-item.product-type-variable .wd-add-btn>a,
-  .owl-carousel li.product-grid-item.is-outofstock .wd-add-btn>a {
+  .owl-carousel .product-grid-item.product-type-variable .wd-add-btn>a,
+  .owl-carousel .product-grid-item.is-outofstock .wd-add-btn>a {
     margin-top: auto;
   }
 }
@@ -5045,6 +5075,68 @@ body.is-wishlist-page .wd-wishlist-remove {
   text-decoration: none !important;
 }
 
+body.woocommerce-account .woocommerce-my-account-wrapper > .wd-my-account-sidebar {
+    width: 100% !important;
+    max-width: 260px !important;
+    float: none !important;
+    flex: none !important;
+}
+body.woocommerce-account .woocommerce-my-account-wrapper > .woocommerce-MyAccount-content {
+    display: flex;
+    flex-direction: column;
+  width: 100% !important;
+  max-width: 1000px !important;
+  float: none !important;
+  flex: none !important;
+}
+
+body.woocommerce-account .woocommerce-MyAccount-content.wd-grid-col {
+  --wd-col-lg: 12 !important;
+  --wd-col-md: 12 !important;
+  --wd-col-sm: 12 !important;
+}
+
+body.woocommerce-account .woocommerce-MyAccount-content .wd-my-account-links.wd-grid {
+  display: flex !important;
+}
+
+body.is-wishlist-page .woocommerce-my-account-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+body.is-wishlist-page .woocommerce-my-account-wrapper::after {
+    content: "";
+    display: block;
+    width: 100%;
+}
+
+body.is-wishlist-page .wp-block-heading,
+body.is-wishlist-page .wp-block-paragraph,
+body.is-wishlist-page .wp-block-list,
+body.is-wishlist-page .wp-block-separator {
+    clear: both;
+    display: block;
+    width: 100%;
+}
+
+@media (min-width: 1200px) {
+    .vc_col-lg-offset-3 {
+        margin-left: 0%;
+    }
+    
+    .vc_col-lg-6 {
+        width: 100%;
+    }
+}
+
+
+@media (max-width: 1024px) {
+   .nav-link-text {
+    color: var(--black);
+  } 
+}
+ 
 
 .searchform .searchsubmit:after {
   background-image: url("data:image/svg+xml;utf8,\
@@ -5054,3 +5146,745 @@ fill='none' stroke='%2329b0c2' stroke-width='1.5'/>\
 </svg>");
 }
 
+
+
+/* =========================================================
+   Zincomed — labels no product-wrapper
+   O sale label e a comunicação ficam fora do product-element-top.
+   ========================================================= */
+.product-grid-item .product-wrapper > .product-labels.labels-rectangular,
+.product-grid-item .product-wrapper > .zincomed-discount-communication {
+    position: absolute !important;
+    top: 0 !important;
+    right: auto !important;
+    bottom: auto !important;
+    left: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 30px !important;
+    min-height: 30px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    z-index: 20 !important;
+    pointer-events: none !important;
+    clip-path: none !important;
+    -webkit-clip-path: none !important;
+    transform: none !important;
+}
+
+.product-grid-item .product-wrapper > .product-labels.labels-rectangular .onsale.product-label {
+    position: static !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 30px !important;
+    min-height: 30px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-sizing: border-box !important;
+    clip-path: none !important;
+    -webkit-clip-path: none !important;
+    transform: none !important;
+    border-radius: 10px 10px 0 0 !important;
+}
+
+.product-grid-item .product-wrapper > .zincomed-discount-communication {
+  background: var(--zincomed-discount-bg, #e11c1c) !important;
+  color: var(--zincomed-discount-color, #fff) !important;
+  font-weight: 800 !important;
+  font-size: 16px !important;
+  line-height: 1 !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  border-radius: 10px 10px 0 0 !important;
+}
+
+.product-grid-item .product-wrapper:has(> .zincomed-discount-communication) > .product-labels.labels-rectangular {
+  display: none !important;
+}
+
+.product-grid-item .product-wrapper > .product-element-top {
+  position: relative !important;
+}
+
+
+/* Zincomed - keep product action buttons above promotional labels */
+.product-grid-item .product-wrapper .wd-buttons {
+    z-index: 47 !important;
+}
+
+/* =========================================================
+   Zincomed 2.0.2 - compatibilidade dos cards com Woodmart 8.5.x
+
+   O Woodmart 8.5 substituiu os wrappers Owl/elements-grid dos
+   carrosseis por .wd-products-element, .wd-product e
+   .wd-product-wrapper. Mantemos os seletores antigos acima e
+   aplicamos o mesmo design apenas à nova estrutura de produtos.
+   ========================================================= */
+.wd-products-element .wd-product {
+  height: 100%;
+}
+
+.wd-products-element .wd-product > .wd-product-wrapper {
+  box-sizing: border-box;
+  height: 100%;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: #fff;
+  border: 1px solid rgba(16, 24, 60, 0.06);
+  border-radius: 10px;
+}
+
+.wd-products-element .wd-product .wd-product-thumb {
+  padding-bottom: 6px;
+  text-align: center;
+}
+
+.wd-products-element .wd-product .wd-product-img-link img {
+  display: inline-block;
+  max-width: 100%;
+  height: auto;
+  margin: 8px auto 12px;
+}
+
+.wd-products-element .wd-product .wd-product-content {
+  flex: 1;
+  padding-top: 8px;
+}
+
+.wd-products-element .wd-product .product-brand,
+.wd-products-element .wd-product .product-brand-name {
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #8b8b8b;
+}
+
+.wd-products-element .wd-product .wd-entities-title {
+  margin: 0 0 8px;
+  font-size: 14px;
+  line-height: 1.2;
+  color: #222;
+  text-align: left;
+}
+
+.wd-products-element .wd-product .product-rating-wrapper {
+  min-height: 34px;
+  padding: 7px 0;
+}
+
+.wd-products-element .wd-product .product-rating,
+.wd-products-element .wd-product .star-rating {
+  display: block;
+  margin: 0;
+  opacity: 1;
+  visibility: visible;
+}
+
+.wd-products-element .wd-product .product-cta-row {
+  margin-top: auto;
+}
+
+.wd-products-element .wd-product .product-cta-price {
+  display: inline-flex;
+  gap: 8px;
+}
+
+.wd-products-element .wd-product .product-cta-price .woocommerce-Price-amount {
+  display: inline-block;
+  padding: 5px 30px;
+  color: var(--primary-color) !important;
+  background: #fec917;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 1.4;
+  white-space: nowrap;
+}
+
+.wd-products-element .wd-product .product-cta-price del .woocommerce-Price-amount {
+  padding-right: 0;
+  padding-left: 0;
+  background: transparent;
+  text-decoration: line-through;
+}
+
+.wd-products-element .wd-product .wd-add-btn-replace {
+  width: 100%;
+  padding-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.wd-products-element .wd-product .wd-add-btn-replace .quantity {
+  box-sizing: border-box;
+  flex: 0 0 82px;
+  width: 82px;
+  height: 30px;
+  display: flex;
+  overflow: hidden;
+  background: transparent;
+  border: 1px solid var(--grey);
+  border-radius: 5px;
+  font-size: 0;
+}
+
+.wd-products-element .wd-product .wd-add-btn-replace .quantity .minus,
+.wd-products-element .wd-product .wd-add-btn-replace .quantity .plus,
+.wd-products-element .wd-product .wd-add-btn-replace .quantity .qty {
+  height: 28px;
+  min-height: 28px;
+  border: 0;
+  background: transparent;
+}
+
+.wd-products-element .wd-product .wd-add-btn-replace .quantity .minus,
+.wd-products-element .wd-product .wd-add-btn-replace .quantity .plus {
+  flex: 0 0 25px;
+  width: 25px;
+  padding: 0 5px;
+  font-size: 14px;
+  line-height: 28px;
+}
+
+.wd-products-element .wd-product .wd-add-btn-replace .quantity .qty {
+  flex: 0 0 30px;
+  width: 30px;
+  padding: 0;
+  font-size: 14px;
+  line-height: 28px;
+  text-align: center;
+}
+
+.wd-products-element .wd-product .wd-add-btn-replace > .button {
+  box-sizing: border-box;
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 30px;
+  padding: 6px 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff !important;
+  background: #08103a !important;
+  border: 0 !important;
+  border-radius: 5px !important;
+  box-shadow: none !important;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.wd-products-element .wd-product.product-type-variable .wd-add-btn-replace > .button,
+.wd-products-element .wd-product.is-outofstock .wd-add-btn-replace > .button {
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .wd-products-element .wd-product > .wd-product-wrapper {
+    padding: 12px;
+  }
+
+  .wd-products-element .wd-product .product-cta-price .woocommerce-Price-amount {
+    padding-right: 12px;
+    padding-left: 12px;
+    font-size: 14px;
+  }
+
+  .wd-products-element .wd-product .wd-add-btn-replace {
+    gap: 8px;
+  }
+}
+
+/* =========================================================
+   Zincomed 2.0.3 - ajuste fino dos cards da Home
+   ========================================================= */
+.wd-products-element .wd-product > .wd-product-wrapper {
+  gap: 8px;
+}
+
+.wd-products-element .wd-product .wd-product-thumb {
+  margin-bottom: 0;
+}
+
+.wd-products-element .wd-product .wd-product-img-link img {
+  margin: 0 auto !important;
+}
+
+.wd-products-element .wd-product .product-cta-price .woocommerce-Price-amount {
+  box-sizing: border-box;
+  height: 30px;
+  padding: 5px 30px !important;
+  line-height: 20px;
+}
+
+.wd-products-element .wd-product .product-cta .wd-add-btn.wd-add-btn-replace {
+  column-gap: 18px !important;
+}
+
+.wd-products-element .wd-product .wd-add-btn-replace > .button {
+  height: 30px !important;
+  min-height: 30px !important;
+  max-height: 30px !important;
+}
+
+@media (max-width: 768px) {
+  .wd-products-element .wd-product .product-cta-price .woocommerce-Price-amount {
+    padding-right: 12px !important;
+    padding-left: 12px !important;
+  }
+
+  .wd-products-element .wd-product .product-cta .wd-add-btn.wd-add-btn-replace {
+    column-gap: 8px !important;
+  }
+}
+
+/* =========================================================
+   Zincomed 2.0.4 - paridade visual com os cards de producao
+   ========================================================= */
+.wd-products-element .wd-product .wd-product-content {
+  padding-top: 0;
+}
+
+.wd-products-element .wd-product .wd-product-img-link img {
+  border: 0 !important;
+}
+
+.wd-products-element .wd-product .star-rating,
+.wd-products-element .wd-product .star-rating::before,
+.wd-products-element .wd-product .star-rating span::before {
+  font-size: 18px !important;
+  line-height: 18px !important;
+}
+
+.wd-products-element .wd-product .star-rating {
+  transform: none !important;
+}
+
+.wd-products-element .wd-product .product-cta-price del .woocommerce-Price-amount {
+  width: auto !important;
+  padding: 5px 0 !important;
+  background: transparent !important;
+  opacity: 0.9;
+}
+
+.wd-products-element .wd-nav-pagin-wrap {
+  display: block !important;
+  margin-top: 20px !important;
+}
+
+.wd-products-element .wd-nav-pagin.wd-lock {
+  opacity: 1 !important;
+}
+
+.wd-products-element .wd-nav-pagin-item,
+.wd-products-element .wd-nav-pagin-item span {
+  width: 35px !important;
+  height: 6px !important;
+  min-width: 35px !important;
+  min-height: 6px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.wd-products-element .wd-nav-pagin-item span {
+  display: block !important;
+  background: var(--secondary-color) !important;
+  border-radius: 10px !important;
+}
+
+/* =========================================================
+   Zincomed 2.0.5 - compatibilidade do favorito com Woodmart 8.5.3
+   ========================================================= */
+.wd-product .wd-wishlist-btn > a::before {
+  content: none !important;
+  display: none !important;
+  background-image: none !important;
+}
+
+.wd-product .wd-wishlist-btn > a,
+.wd-product .wd-wishlist-btn .wd-action-icon {
+  display: flex !important;
+  width: 45px !important;
+  height: 45px !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.wd-product .wd-product-img-hover img,
+.wd-product .hover-img img {
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+}
+
+/* =========================================================
+   Zincomed 2.0.6 - controles unificados dos carrosseis
+   ========================================================= */
+.wd-nav-pagin.wd-type-bullets {
+  gap: 0 !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.wd-nav-pagin.wd-type-bullets .wd-nav-pagin-item,
+.wd-nav-pagin.wd-type-bullets .wd-nav-pagin-item span {
+  width: 35px !important;
+  height: 6px !important;
+  min-width: 35px !important;
+  min-height: 6px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 10px !important;
+}
+
+.wd-nav-pagin.wd-type-bullets .wd-nav-pagin-item {
+  margin: 5px !important;
+  background: transparent !important;
+}
+
+.wd-nav-pagin.wd-type-bullets .wd-nav-pagin-item span {
+  display: block !important;
+  margin: 0 !important;
+  background-color: #d9d9d9 !important;
+}
+
+.wd-nav-pagin.wd-type-bullets .wd-nav-pagin-item.wd-active span {
+  background-color: var(--secondary-color) !important;
+}
+
+.vc_carousel-indicators {
+  display: flex !important;
+  position: absolute !important;
+  bottom: -31px !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 26px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  gap: 0 !important;
+  justify-content: center !important;
+  align-items: center !important;
+  transform: none !important;
+}
+
+.vc_slide.vc_images_carousel {
+  margin-bottom: 31px !important;
+}
+
+.vc_carousel-indicators li {
+  width: 35px !important;
+  height: 6px !important;
+  min-width: 35px !important;
+  min-height: 6px !important;
+  margin: 5px !important;
+  padding: 0 !important;
+  background-color: #d9d9d9 !important;
+  border: 0 !important;
+  border-radius: 10px !important;
+}
+
+.vc_carousel-indicators li.vc_active {
+  background-color: var(--secondary-color) !important;
+}
+
+/* =========================================================
+   Zincomed 2.0.9 - single product / Woodmart 8.5.x
+   ========================================================= */
+.single-product .wd-product-top.wd-grid-g,
+.single-product .wd-product-main.wd-grid-g {
+  width: 100%;
+}
+
+.single-product .wd-product-main > .wd-product-gallery-col,
+.single-product .wd-product-main > .wd-product-summary-col {
+  min-width: 0;
+  padding-inline: 0 !important;
+}
+
+.single-product .wd-product-gallery,
+.single-product .wd-product-gallery .woocommerce-product-gallery {
+  width: 100%;
+  max-width: 100%;
+}
+
+.single-product .my-title-row .product-title {
+  color: #333;
+  font-size: 20.8px;
+  line-height: 1.4;
+}
+
+.single-product div.product-excerpt {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.single-product .wd-price-pill p.price {
+  font-size: 16px !important;
+  line-height: 1.6;
+}
+
+@media (max-width: 768.98px) {
+  .single-product .wd-product-top.wd-grid-g,
+  .single-product .wd-product-main.wd-grid-g {
+    --wd-gap-sm: 20px;
+  }
+
+  .single-product .wd-product-gallery-col,
+  .single-product .wd-product-summary-col {
+    width: 100%;
+  }
+}
+
+/* =========================================================
+   Zincomed 2.0.10 - tipografia e relacionados
+   ========================================================= */
+.single-product .my-title-row .product-title {
+  font-weight: 500;
+}
+
+.single-product div.product-excerpt,
+.single-product div.product-excerpt p {
+  font-size: 16px !important;
+  line-height: 25.6px !important;
+}
+
+.single-product .wd-price-pill p.price {
+  font-weight: 400;
+}
+
+.single-product .wd-related-products .wd-product-thumb {
+  margin-bottom: 0 !important;
+}
+
+.single-product .wd-related-products .wd-product-content {
+  padding-top: 8px !important;
+}
+
+.single-product .wd-related-products .product-brand-title-wrap {
+  display: flex !important;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 70px;
+  height: 70px;
+}
+
+.single-product .wd-related-products .product-brand {
+  letter-spacing: normal !important;
+}
+
+.single-product .wd-related-products .product-cta-price .woocommerce-Price-amount {
+  line-height: 22.4px;
+}
+
+/* =========================================================
+   Zincomed 2.0.11 - abas da página de produto
+   ========================================================= */
+.single-product .product-tabs-wrapper {
+  background-color: #fff;
+  border-top: 1px solid rgba(0, 0, 0, 0.106);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.106);
+}
+
+.single-product .woocommerce-tabs .wd-nav-tabs-wrapper {
+  margin-bottom: 30px;
+}
+
+.single-product .woocommerce-tabs .wd-nav-tabs > li:not(:last-child) {
+  margin-inline-end: 30px;
+}
+
+.single-product .woocommerce-tabs .wd-nav-tabs .wd-nav-link {
+  gap: 0;
+  line-height: 16px;
+}
+
+.single-product .woocommerce-Tabs-panel p {
+  font-size: 16px !important;
+  line-height: 25.6px !important;
+}
+
+.single-product .woocommerce-Tabs-panel ul,
+.single-product .woocommerce-Tabs-panel ol {
+  margin-bottom: 20px;
+}
+
+@media (max-width: 768.98px) {
+  .single-product .woocommerce-tabs .wd-nav-tabs-wrapper {
+    margin-bottom: 0;
+  }
+
+  .single-product .woocommerce-tabs .wd-nav-tabs > li:not(:last-child) {
+    margin-inline-end: 0;
+  }
+}
+
+/* =========================================================
+   Zincomed 2.0.12 - informação adicional e envio
+   ========================================================= */
+.single-product #tab-additional_information .shop_attributes {
+  width: 100%;
+  max-width: 650px;
+  margin-inline: auto;
+}
+
+/* No Woodmart 8.5.x, valores de atributos de taxonomia deixaram de ser <p>. */
+.single-product #tab-additional_information .wd-term,
+.single-product #tab-additional_information .wd-term-name {
+  font-size: 16px;
+  line-height: 22.4px;
+}
+
+/* Mantém o texto simples de envio com a tipografia usada na produção. */
+.single-product #tab-wd_additional_tab .wc-tab-inner {
+  color: #777;
+  font-size: 12px;
+  line-height: 19.2px;
+}
+
+@media (max-width: 768.98px) {
+  /* O wrapper .wd-attr-label foi acrescentado pelo tema pai novo. */
+  .single-product #tab-additional_information th .wd-attr-name {
+    color: var(--black) !important;
+  }
+}
+
+/* =========================================================
+   Zincomed 2.0.13 - carrinho no Woodmart 8.5.x
+   ========================================================= */
+.woocommerce-cart .cart-content-wrapper > .woocommerce-notices-wrapper {
+  flex: 1 1 100%;
+}
+
+.woocommerce-cart .cart-content-wrapper .woocommerce-message {
+  min-height: 60px;
+  margin-bottom: 30px;
+  padding: 10px 30px 10px 65px;
+}
+
+.woocommerce-cart .woocommerce-cart-form thead th {
+  padding: 15px 10px;
+  border-bottom: 3px solid var(--primary-color);
+}
+
+.woocommerce-cart .woocommerce-cart-form thead th.product-remove {
+  padding-inline-start: 10px;
+}
+
+.woocommerce-cart .woocommerce-cart-form .product-thumbnail img {
+  border-radius: 0;
+}
+
+.woocommerce-cart .woocommerce-cart-form .cart-actions {
+  align-items: stretch;
+  flex-wrap: nowrap;
+  gap: 20px;
+}
+
+.woocommerce-cart .woocommerce-cart-form .wd-coupon-form {
+  flex: 1 1 auto;
+}
+
+.woocommerce-cart .woocommerce-cart-form #coupon_code {
+  border-color: var(--secondary-color);
+}
+
+.woocommerce-cart .woocommerce-cart-form .buy-again-continue-shopping {
+  flex: 0 0 auto;
+  background-color: var(--grey);
+}
+
+/* Os controles +/- agora são <button>, e não mais input[type="button"]. */
+.woocommerce-cart .cart_item div.quantity :is(button.minus, button.plus) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 25px;
+  width: 25px;
+  height: 30px !important;
+  min-height: 30px;
+  padding: 0 5px;
+  border: 0;
+  border-radius: 0;
+  background-color: var(--grey) !important;
+  color: var(--dark-grey) !important;
+  box-shadow: none;
+  font-size: 14px !important;
+}
+
+.woocommerce-cart .cart_item div.quantity input.qty {
+  width: 40px !important;
+  height: 30px !important;
+}
+
+.woocommerce-cart .cart-content-wrapper > .cart_totals {
+  align-self: stretch;
+}
+
+.woocommerce-cart .cart-content-wrapper > .cart_totals .cart-totals-inner {
+  height: 100%;
+  border: 0 !important;
+  background-color: var(--grey);
+  color: var(--black);
+}
+
+.woocommerce-cart .cart-content-wrapper > .cart_totals :is(h2, th, td, label),
+.woocommerce-cart .cart-content-wrapper > .cart_totals .amount,
+.woocommerce-cart .cart-content-wrapper > .cart_totals .tax_label {
+  color: var(--black) !important;
+}
+
+.woocommerce-cart .cart-content-wrapper > .cart_totals .checkout-button {
+  background-color: var(--black);
+}
+
+.woocommerce-cart .cart-content-wrapper > .cart_totals .checkout-button:hover {
+  background-color: var(--primary-color);
+}
+
+@media (min-width: 1025px) {
+  .woocommerce-cart .cart-content-wrapper {
+    align-items: stretch;
+  }
+
+  .woocommerce-cart .cart-content-wrapper > .woocommerce-cart-form {
+    flex: 0 0 calc(66.6667% - 15px);
+  }
+
+  .woocommerce-cart .cart-content-wrapper > .cart_totals {
+    flex: 0 0 calc(33.3333% - 15px);
+  }
+}
+
+@media (max-width: 768.98px) {
+  .woocommerce-cart .cart-content-wrapper .woocommerce-message {
+    margin-bottom: 20px;
+  }
+
+  .woocommerce-cart .woocommerce-cart-form .cart-actions {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .woocommerce-cart .woocommerce-cart-form .wd-coupon-form {
+    flex: 1 1 100%;
+  }
+
+  .woocommerce-cart .cart-content-wrapper > .cart_totals .cart-totals-inner {
+    height: auto;
+  }
+}

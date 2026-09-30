@@ -1,217 +1,102 @@
-<?php 
-/* Child theme generated with WPS Child Theme Generator */
-            
-if ( ! function_exists( 'b7ectg_theme_enqueue_styles' ) ) {            
-    add_action( 'wp_enqueue_scripts', 'b7ectg_theme_enqueue_styles' );
-    
-    function b7ectg_theme_enqueue_styles() {
-        wp_enqueue_style( 'parent-style', get_template_directory_uri() . '/style.css' );
-    }
+<?php
+/**
+ * Zincomed child theme compatibility layer for Woodmart 8.5.x.
+ */
+
+defined( 'ABSPATH' ) || exit;
+
+if ( ! defined( 'ZINCOMED_CHILD_VERSION' ) ) {
+  define( 'ZINCOMED_CHILD_VERSION', wp_get_theme()->get( 'Version' ) ?: '2.0.13' );
 }
 
-add_action('wp_enqueue_scripts', function () {
-  // parent
-  wp_enqueue_style(
-    'woodmart-parent',
-    get_template_directory_uri() . '/style.css',
-    [],
-    wp_get_theme(get_template())->get('Version')
-  );
+add_action( 'after_setup_theme', function () {
+  load_child_theme_textdomain( 'zincomed-child', get_stylesheet_directory() . '/languages' );
+} );
 
-  // child (depois do parent)
+add_action( 'wp_enqueue_scripts', function () {
   wp_enqueue_style(
-    'woodmart-child',
-    get_stylesheet_directory_uri() . '/style.css',
-    ['woodmart-parent'],
-    wp_get_theme()->get('Version')
+    'zincomed-child',
+    get_stylesheet_uri(),
+    array( 'woodmart-style' ),
+    ZINCOMED_CHILD_VERSION
   );
-}, 20);
+}, 10002 );
 
 /* Unregistered Widgets */
-if ( ! function_exists( 'b7ectg_unregister_widget' ) ) {
-    add_action( 'widgets_init', 'b7ectg_unregister_widget' );
-    
-    function b7ectg_unregister_widget() {
-    
-        unregister_widget( '0000000000001db50000000000000000' );
-    }
+if ( ! function_exists( 'zincomed_child_unregister_widget' ) ) {
+	add_action( 'widgets_init', 'zincomed_child_unregister_widget' );
+
+	function zincomed_child_unregister_widget() {
+		unregister_widget( '0000000000001db50000000000000000' );
+	}
 }
 
-// Remove default summary rendering if you call individual functions manually
-remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_title', 5 );
-remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_price', 10 );
-remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_excerpt', 20 );
-remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_meta', 40 );
-remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_sharing', 50 );
+// Keep the WPBakery carousel speed numeric without overriding a removed
+// Woodmart template file.
+add_filter( 'shortcode_atts_vc_images_carousel', function( $out ) {
+  if ( isset( $out['speed'] ) ) {
+    $out['speed'] = absint( $out['speed'] );
+  }
 
-// Mostrar rating sempre (mesmo quando não houver reviews)
-add_action( 'woocommerce_single_product_summary', 'my_always_show_product_rating', 10 );
-function my_always_show_product_rating() {
-    global $product;
-    if ( ! $product ) return;
-
-    $avg   = (float) $product->get_average_rating(); // média (0..5)
-    $count = (int)   $product->get_rating_count();   // número de avaliações
-
-    // wrapper com classes para estilização
-    echo '<div class="my-always-rating">';
-
-    if ( $count > 0 ) {
-        // mostra média + contador normal
-        echo '<div class="rating-stars" aria-label="Avaliação média: ' . esc_attr( $avg ) . ' de 5">';
-        echo wc_get_rating_html( $avg ); // HTML padrão das estrelas
-        echo '</div>';
-        echo '<div class="rating-count">(' . intval( $count ) . ' avaliações)</div>';
-    } else {
-        // não há avaliações: mostra estrelas vazias + rótulo "Sem avaliações"
-        // wc_get_rating_html(0) gera o HTML das estrelas com 0 valor (vazias)
-        echo '<div class="rating-stars no-reviews" aria-label="Sem avaliações">';
-        echo wc_get_rating_html( 0 );
-        echo '</div>';
-        echo '<div class="rating-count no-reviews-text">Sem avaliações</div>';
-    }
-
-    echo '</div>'; // .my-always-rating
-}
+  return $out;
+}, 10, 1 );
 
 /**
- * Override template for Woodmart product carousel widgets.
+ * Keep Woodmart's native 8.5.x product loop controller and replace only the
+ * inner visual card. This preserves its grid, slider, wishlist and AJAX state.
  */
 add_filter( 'wc_get_template_part', function( $template, $slug, $name ) {
+  $product_card_templates = array(
+    'product-alt',
+    'product-base',
+    'product-button',
+    'product-buttons-on-hover',
+    'product-custom',
+    'product-fw-button',
+    'product-icons',
+    'product-info',
+    'product-info-alt',
+    'product-list',
+    'product-quick',
+    'product-standard',
+    'product-tiled',
+  );
 
-    // Só mexe quando é o template de produtos
-    if ( $slug === 'content' && $name === 'product' ) {
-
-        // Detecta se estamos em um widget/carrossel do Woodmart
-        // O Woodmart carrega carrosséis dentro desses wrappers:
-        $is_carousel =
-            did_action('woodmart_products_shortcode') ||
-            did_action('woodmart_shortcode_products_tab') ||
-            did_action('woodmart_shortcode_products') ||
-            ( ! empty( $GLOBALS['woodmart_shortcode_is_carousel'] ) );
-
-        if ( $is_carousel ) {
-
-            // Verifica se existe o template customizado no child theme
-            $custom = get_stylesheet_directory() . '/woocommerce/content-product-carousel.php';
-
-            if ( file_exists( $custom ) ) {
-                return $custom;
-            }
-        }
-    }
-
+  if ( 'content' !== $slug || ! in_array( $name, $product_card_templates, true ) ) {
     return $template;
+  }
+
+  $custom = get_stylesheet_directory() . '/woocommerce/content-product-zincomed.php';
+
+  return file_exists( $custom ) ? $custom : $template;
 }, 20, 3 );
 
+add_filter( 'woocommerce_post_class', function( $classes, $product ) {
+  if ( $product instanceof WC_Product && ! $product->is_in_stock() ) {
+    $classes[] = 'is-outofstock';
+  }
+
+  return $classes;
+}, 10, 2 );
+
 function zincomed_child_scripts() {
-    wp_enqueue_script(
-        'zincomed-cat-toggle',
-        get_stylesheet_directory_uri() . '/js/categories-fix.js',
-        array('jquery'),
-        '1.0',
-        true
-    );
+	wp_enqueue_script(
+		'zincomed-cat-toggle',
+		get_stylesheet_directory_uri() . '/js/categories-fix.js',
+		array( 'jquery' ),
+		ZINCOMED_CHILD_VERSION,
+		true
+	);
+
+	wp_enqueue_script(
+		'zincomed-platform-classes',
+		get_stylesheet_directory_uri() . '/assets/js/platform-classes.js',
+		array(),
+		ZINCOMED_CHILD_VERSION,
+		false
+	);
 }
-add_action('wp_enqueue_scripts', 'zincomed_child_scripts', 9999);
-
-function zincomed_override_categories_script() {
-    ?>
-    <script type="text/javascript">
-    (function($){
-      // Espera o DOM e também que o objeto exista
-      function overrideAccordion() {
-        if (typeof woodmartThemeModule === 'undefined') {
-          return false;
-        }
-
-        // substitui a função exatamente como combinamos
-        woodmartThemeModule.categoriesAccordion = function() {
-          if (typeof woodmart_settings !== 'undefined' && woodmart_settings.categories_toggle === 'no') {
-            return;
-          }
-
-          var $widget = $('.widget_product_categories'),
-              $list   = $widget.find('.product-categories'),
-              time    = 300;
-
-          $list.find('.cat-parent').each(function() {
-            var $this = $(this);
-
-            if ($this.find(' > .wd-cats-toggle').length > 0) return;
-            if ($this.find(' > .children').length === 0 || $this.find(' > .children > *').length === 0) return;
-
-            var $link = $this.find('> a').first();
-            if ($link.length) {
-              $link.before('<div class="wd-cats-toggle"></div>');
-            } else {
-              $this.prepend('<div class="wd-cats-toggle"></div>');
-            }
-          });
-
-          $list.off('click.zincomed').on('click.zincomed', '.wd-cats-toggle', function(e) {
-            e.preventDefault();
-            var $btn     = $(this),
-                $subList = $btn.siblings('ul.children').first();
-
-            if (!$subList.length) $subList = $btn.closest('li').find('> .children').first();
-
-            if ($subList.hasClass('list-shown')) {
-              $btn.removeClass('toggle-active');
-              $subList.stop().slideUp(time).removeClass('list-shown');
-            } else {
-              $subList.parent().parent().find('> li > .list-shown').stop().slideUp().removeClass('list-shown');
-              $subList.parent().parent().find('> li > .toggle-active').removeClass('toggle-active');
-              $btn.addClass('toggle-active');
-              $subList.stop().slideDown(time).addClass('list-shown');
-            }
-          });
-
-          if ($list.find('li.current-cat.cat-parent, li.current-cat-parent').length > 0) {
-            $list.find('li.current-cat.cat-parent, li.current-cat-parent').find('> .wd-cats-toggle').trigger('click');
-          }
-        };
-
-        // chama uma vez agora (se já houver markup)
-        try { woodmartThemeModule.categoriesAccordion(); } catch(e) {}
-        return true;
-      }
-
-      // tenta executar depois do DOM pronto e também a cada 300ms até conseguir (máx 10 tentativas)
-      $(function(){
-        var tries = 0;
-        var i = setInterval(function(){
-          if (overrideAccordion() || ++tries > 10) clearInterval(i);
-        }, 300);
-      });
-
-    })(jQuery);
-    </script>
-    <?php
-}
-add_action('wp_footer', 'zincomed_override_categories_script', 9999);
-
-// Detecta Mac e adiciona classe no body para ajustes de CSS
-add_action('wp_head', function () {
-  ?>
-  <script>
-  (function () {
-    var ua = navigator.userAgent || '';
-    var isMac = ua.indexOf('Macintosh') !== -1 || ua.indexOf('Mac OS X') !== -1;
-    if (isMac) {
-      document.documentElement.classList.add('is-mac');
-      if (document.body) {
-        document.body.classList.add('is-mac');
-      } else {
-        document.addEventListener('DOMContentLoaded', function () {
-          document.body.classList.add('is-mac');
-        });
-      }
-    }
-  })();
-  </script>
-  <?php
-}, 1);
+add_action( 'wp_enqueue_scripts', 'zincomed_child_scripts', 9999 );
 
 // Esconde o campo de quantidade quando só há 1 unidade disponível
 add_filter( 'woocommerce_quantity_input_args', function( $args, $product ) {
@@ -230,27 +115,27 @@ add_filter( 'woocommerce_is_sold_individually', function( $sold_individually, $p
   return $sold_individually;
 }, 10, 2 );
 
-add_filter( 'woocommerce_product_add_to_cart_text', function() {
-  return 'COMPRAR';
-});
+add_filter( 'woocommerce_product_add_to_cart_text', function () {
+  return __( 'COMPRAR', 'zincomed-child' );
+} );
 
-add_filter( 'woocommerce_product_single_add_to_cart_text', function() {
-  return 'COMPRAR';
-});
+add_filter( 'woocommerce_product_single_add_to_cart_text', function () {
+  return __( 'COMPRAR', 'zincomed-child' );
+} );
 
-add_filter('woocommerce_product_add_to_cart_text', function ($text, $product) {
-  if ( $product && $product->is_type('variable') ) {
-    return __('Ver opções', 'woocommerce');
+add_filter( 'woocommerce_product_add_to_cart_text', function ( $text, $product ) {
+  if ( $product && $product->is_type( 'variable' ) ) {
+    return __( 'Ver opções', 'zincomed-child' );
   }
   return $text;
-}, 20, 2);
+}, 20, 2 );
 
 add_action( 'wp_enqueue_scripts', function () {
   wp_enqueue_script(
     'woodmart-autoupdate-cart',
     get_stylesheet_directory_uri() . '/assets/js/autoupdate-cart.js',
     array(), 
-    '1.0',
+    ZINCOMED_CHILD_VERSION,
     true
   );
 }, 20 );
@@ -266,7 +151,9 @@ add_filter( 'woocommerce_my_account_my_orders_actions', function ( $actions, $or
 }, 10, 2 );
 
 add_action( 'wp_enqueue_scripts', function () {
-  if ( is_admin() ) return;
+  if ( is_admin() ) {
+    return;
+  }
 
   // Script para loop de produtos (não carrega no carrinho/checkout)
   if ( ! is_cart() && ! is_checkout() ) {
@@ -274,7 +161,7 @@ add_action( 'wp_enqueue_scripts', function () {
       'woodmart-child-loop-qty',
       get_stylesheet_directory_uri() . '/assets/js/loop-qty.js',
       array( 'jquery' ),
-      '1.0.1',
+      ZINCOMED_CHILD_VERSION,
       true
     );
   }
@@ -285,41 +172,49 @@ add_action( 'wp_enqueue_scripts', function () {
       'woodmart-child-single-product-qty',
       get_stylesheet_directory_uri() . '/assets/js/single-product-qty.js',
       array(),
-      '1.0.1',
+      ZINCOMED_CHILD_VERSION,
+      true
+    );
+
+    wp_enqueue_script(
+      'zincomed-product-variation-boxes',
+      get_stylesheet_directory_uri() . '/assets/js/product-variation-boxes.js',
+      array(),
+      ZINCOMED_CHILD_VERSION,
       true
     );
   }
 }, 20 );
 
-add_action( 'wp_enqueue_scripts', function() {
+add_action( 'wp_enqueue_scripts', function () {
 
 	wp_enqueue_script(
 		'product-cards',
 		get_stylesheet_directory_uri() . '/assets/js/product-cards.js',
-		[],
-		'1.0',
+		array(),
+		ZINCOMED_CHILD_VERSION,
 		true
 	);
 
 }, 20 );
 
-add_filter('woocommerce_package_rates', 'custom_hide_transportadora_when_free', 100, 2);
+add_filter( 'woocommerce_package_rates', 'zincomed_child_hide_transportadora_when_free', 100, 2 );
 
-function custom_hide_transportadora_when_free($rates, $package) {
+function zincomed_child_hide_transportadora_when_free( $rates, $package ) {
     $has_free = false;
 
     // Detecta frete grátis (price = 0)
-    foreach ($rates as $rate) {
-        if ((float) $rate->cost === 0) {
+    foreach ( $rates as $rate ) {
+        if ( (float) $rate->cost === 0.0 ) {
             $has_free = true;
             break;
         }
     }
 
-    if ($has_free) {
-        foreach ($rates as $rate_id => $rate) {
-            if (stripos($rate->label, 'transportadora') !== false) {
-                unset($rates[$rate_id]);
+    if ( $has_free ) {
+        foreach ( $rates as $rate_id => $rate ) {
+            if ( false !== stripos( $rate->label, 'transportadora' ) ) {
+                unset( $rates[ $rate_id ] );
             }
         }
     }
@@ -327,10 +222,14 @@ function custom_hide_transportadora_when_free($rates, $package) {
     return $rates;
 }
 
-add_filter('body_class', function($classes) {
-  if (isset($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], 'wishlist') !== false) {
+add_filter( 'body_class', function ( $classes ) {
+  $request_uri = isset( $_SERVER['REQUEST_URI'] )
+    ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) )
+    : '';
+
+  if ( false !== strpos( $request_uri, 'wishlist' ) ) {
     $classes[] = 'is-wishlist-page';
   }
 
   return $classes;
-});
+} );

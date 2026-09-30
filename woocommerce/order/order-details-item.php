@@ -59,16 +59,16 @@ if ( ! apply_filters( 'woocommerce_order_item_visible', true, $item ) ) {
 	<td class="woocommerce-table__product-qty product-qty">
 		<?php
 		// Mostra qty (com del/ins quando tem refund) e mantém filtro original do Woo.
-		echo apply_filters(
+		echo wp_kses_post( apply_filters(
 			'woocommerce_order_item_quantity_html',
 			$qty_display,
 			$item
-		); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		) );
 		?>
 	</td>
 
 	<td class="woocommerce-table__product-total product-total">
-		<?php echo $order->get_formatted_line_subtotal( $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+		<?php echo wp_kses_post( $order->get_formatted_line_subtotal( $item ) ); ?>
 	</td>
 
 </tr>
@@ -77,7 +77,7 @@ if ( ! apply_filters( 'woocommerce_order_item_visible', true, $item ) ) {
 
 <tr class="woocommerce-table__product-purchase-note product-purchase-note">
 	<td colspan="3">
-		<?php echo wpautop( do_shortcode( wp_kses_post( $purchase_note ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+		<?php echo wp_kses_post( wpautop( do_shortcode( wp_kses_post( $purchase_note ) ) ) ); ?>
 	</td>
 </tr>
 

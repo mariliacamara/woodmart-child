@@ -37,7 +37,7 @@ function attachWishlistRemoveUX() {
 
         btn.addEventListener("click", function() {
 
-            const card = btn.closest("li.product");
+            const card = btn.closest(".wd-product, .product-grid-item, li.product");
 
             setTimeout(() => {
                 if (card) {
@@ -56,5 +56,9 @@ function attachWishlistRemoveUX() {
 // inicial
 attachWishlistRemoveUX();
 
-// sempre que o Woodmart atualizar a wishlist
+// Compatibilidade com o evento antigo e com o evento atual do Woodmart.
 document.body.addEventListener("wdWishlistRefresh", attachWishlistRemoveUX);
+
+if (window.jQuery) {
+    jQuery(document).on("wdUpdateWishlist", attachWishlistRemoveUX);
+}

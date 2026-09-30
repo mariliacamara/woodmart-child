@@ -47,7 +47,7 @@
     // pega quantidade do card
     function getQtyFromCard(buttonEl) {
 
-      const card = buttonEl.closest('li.product, li.product-grid-item');
+      const card = buttonEl.closest('.wd-product, .product-grid-item, li.product');
       if (!card) return 1;
 
       const input = card.querySelector('input.qty');
