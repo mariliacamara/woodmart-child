@@ -26,6 +26,10 @@ $is_oos = ! $product->is_in_stock();
 	</a>
 
 	<div class="product-wrapper">
+		<?php do_action( 'zincomed_product_element_top' ); ?>
+		<?php if ( function_exists( 'woocommerce_show_product_loop_sale_flash' ) ) : ?>
+			<?php woocommerce_show_product_loop_sale_flash(); ?>
+		<?php endif; ?>
 		<!-- TOP -->
 		<div class="product-element-top">
 			<?php if ( $is_oos ) : ?>
@@ -50,8 +54,10 @@ $is_oos = ! $product->is_in_stock();
 				</div>
 			<?php endif; ?>
 
+
 			<a href="<?php echo esc_url( get_permalink( $product->get_id() ) ); ?>" class="product-image-link">
-				<?php do_action( 'woocommerce_before_shop_loop_item_title' ); ?>
+				<?php remove_action( 'woocommerce_before_shop_loop_item_title', 'woocommerce_show_product_loop_sale_flash', 10 );
+			do_action( 'woocommerce_before_shop_loop_item_title' ); ?>
 			</a>
 
 			<?php

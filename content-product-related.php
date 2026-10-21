@@ -17,6 +17,10 @@ $is_oos = ! $product->is_in_stock();
 <li <?php wc_product_class( 'product-grid-item product wd-hover-standard' . ( $is_oos ? ' is-outofstock' : '' ), $product ); ?>
   data-id="<?php echo esc_attr( $product->get_id() ); ?>">
   <div class="product-wrapper">
+    <?php do_action( 'zincomed_product_element_top' ); ?>
+    <?php if ( function_exists( 'woocommerce_show_product_loop_sale_flash' ) ) : ?>
+      <?php woocommerce_show_product_loop_sale_flash(); ?>
+    <?php endif; ?>
         <!-- TOP: imagem e quick actions -->
     <div class="product-element-top">
       <?php if ( $is_oos ) : ?>
@@ -28,7 +32,7 @@ $is_oos = ! $product->is_in_stock();
 					?>
 				</div>
 			<?php endif; ?>
-      <div class="wd-buttons wd-pos-r-t<?php echo esc_attr( woodmart_get_old_classes( ' woodmart-buttons' ) ); ?>">
+        <div class="wd-buttons wd-pos-r-t<?php echo esc_attr( woodmart_get_old_classes( ' woodmart-buttons' ) ); ?>">
         <?php do_action( 'woodmart_product_action_buttons' ); ?>
       </div>
       <?php
@@ -48,7 +52,8 @@ $is_oos = ! $product->is_in_stock();
          * @hooked woocommerce_show_product_loop_sale_flash - 10
          * @hooked woodmart_template_loop_product_thumbnail - 10
          */
-        do_action( 'woocommerce_before_shop_loop_item_title' );
+        remove_action( 'woocommerce_before_shop_loop_item_title', 'woocommerce_show_product_loop_sale_flash', 10 );
+			do_action( 'woocommerce_before_shop_loop_item_title' );
         ?>
         </a>
 
@@ -81,11 +86,16 @@ $is_oos = ! $product->is_in_stock();
                 $meta_image_id = get_term_meta( $term->term_id, 'image_id', true );
                 $meta_thumb = get_term_meta( $term->term_id, 'thumbnail_id', true );
                 if ( $meta_image ) {
-                    if ( is_array( $meta_image ) && ! empty( $meta_image['id'] ) ) {
-                        $brand_logo = wp_get_attachment_image_url( intval( $meta_image['id'] ), 'full' );
+                    if ( is_array( $meta_image ) ) {
+                        if ( ! empty( $meta_image['id'] ) && is_numeric( $meta_image['id'] ) ) {
+                            $brand_logo = wp_get_attachment_image_url( intval( $meta_image['id'] ), 'full' );
+                        }
+                        if ( ! $brand_logo && ! empty( $meta_image['url'] ) && is_string( $meta_image['url'] ) ) {
+                            $brand_logo = esc_url_raw( $meta_image['url'] );
+                        }
                     } elseif ( is_numeric( $meta_image ) ) {
                         $brand_logo = wp_get_attachment_image_url( intval( $meta_image ), 'full' );
-                    } else {
+                    } elseif ( is_string( $meta_image ) ) {
                         $brand_logo = esc_url_raw( $meta_image );
                     }
                 }

@@ -31,6 +31,12 @@
   }
 })(jQuery);
 
+document.addEventListener('DOMContentLoaded', function() {
+    document
+        .querySelector('.woocommerce-MyAccount-content.wd-grid-col')
+        ?.removeAttribute('style');
+});
+
 document.addEventListener("DOMContentLoaded", () => {
   document
     .querySelectorAll('td.product-subtotal span.woocommerce-Price-amount.amount[style]')
