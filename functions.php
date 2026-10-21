@@ -334,3 +334,23 @@ add_filter('body_class', function($classes) {
 
   return $classes;
 });
+
+/**
+ * Build related-product purchase links from the product's own permalink.
+ * WooCommerce otherwise carries the current page's query parameters into
+ * these URLs (for example, ?gQT=1&add-to-cart=123).
+ */
+add_filter( 'woocommerce_product_add_to_cart_url', function ( $url, $product ) {
+	if (
+		! is_singular( 'product' ) ||
+		! ( $product instanceof WC_Product ) ||
+		! $product->is_type( 'simple' ) ||
+		! $product->is_purchasable() ||
+		! $product->is_in_stock() ||
+		get_queried_object_id() === $product->get_id()
+	) {
+		return $url;
+	}
+
+	return add_query_arg( 'add-to-cart', $product->get_id(), get_permalink( $product->get_id() ) );
+}, 20, 2 );

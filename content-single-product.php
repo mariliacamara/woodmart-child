@@ -64,12 +64,16 @@ global $product;
                     // Normalize into a URL
                     if ( $image_meta ) {
                         // sometimes it's array with ['id'] or it's already a URL
-                        if ( is_array( $image_meta ) && ! empty( $image_meta['id'] ) ) {
-                            $brand_logo_url = wp_get_attachment_image_url( intval( $image_meta['id'] ), 'full' );
+                        if ( is_array( $image_meta ) ) {
+                            if ( ! empty( $image_meta['id'] ) && is_numeric( $image_meta['id'] ) ) {
+                                $brand_logo_url = wp_get_attachment_image_url( intval( $image_meta['id'] ), 'full' );
+                            }
+                            if ( ! $brand_logo_url && ! empty( $image_meta['url'] ) && is_string( $image_meta['url'] ) ) {
+                                $brand_logo_url = esc_url_raw( $image_meta['url'] );
+                            }
                         } elseif ( is_numeric( $image_meta ) ) {
                             $brand_logo_url = wp_get_attachment_image_url( intval( $image_meta ), 'full' );
-                        } else {
-                            // assume it's a URL string
+                        } elseif ( is_string( $image_meta ) ) {
                             $brand_logo_url = esc_url_raw( $image_meta );
                         }
                     }
@@ -169,7 +173,7 @@ global $product;
             if ( function_exists( 'woodmart_get_shipping_text' ) ) {
               echo woodmart_get_shipping_text();
             } else {
-              echo '<span>Entrega entre 24h a 48h para Portugal continental.</span>';
+              echo '<span>Entrega em 1 a 5 dias úteis para Portugal Continental.</span>';
             }
             ?>
           </div>
