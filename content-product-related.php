@@ -86,11 +86,16 @@ $is_oos = ! $product->is_in_stock();
                 $meta_image_id = get_term_meta( $term->term_id, 'image_id', true );
                 $meta_thumb = get_term_meta( $term->term_id, 'thumbnail_id', true );
                 if ( $meta_image ) {
-                    if ( is_array( $meta_image ) && ! empty( $meta_image['id'] ) ) {
-                        $brand_logo = wp_get_attachment_image_url( intval( $meta_image['id'] ), 'full' );
+                    if ( is_array( $meta_image ) ) {
+                        if ( ! empty( $meta_image['id'] ) && is_numeric( $meta_image['id'] ) ) {
+                            $brand_logo = wp_get_attachment_image_url( intval( $meta_image['id'] ), 'full' );
+                        }
+                        if ( ! $brand_logo && ! empty( $meta_image['url'] ) && is_string( $meta_image['url'] ) ) {
+                            $brand_logo = esc_url_raw( $meta_image['url'] );
+                        }
                     } elseif ( is_numeric( $meta_image ) ) {
                         $brand_logo = wp_get_attachment_image_url( intval( $meta_image ), 'full' );
-                    } else {
+                    } elseif ( is_string( $meta_image ) ) {
                         $brand_logo = esc_url_raw( $meta_image );
                     }
                 }
