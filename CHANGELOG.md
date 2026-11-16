@@ -20,6 +20,11 @@ produção e com a correção de 21/10.
 
 ### Fixed
 
+- Carrossel de imagens do WPBakery (banner principal da home, desktop e
+  mobile) desenhado com o carrossel do próprio Woodmart. No Woodmart 8.6 o
+  modelo padrão do WPBakery ficava vazio, porque depende de estilos que o
+  tema não carrega; os links, a troca automática e a velocidade continuam a
+  vir das opções do elemento.
 - Links "Comprar" dos produtos relacionados montados a partir do link do
   próprio produto, sem herdar os parâmetros do endereço da página atual
   (alteração 1.0.2 da produção).
