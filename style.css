@@ -293,7 +293,7 @@ div.quantity input[type="button"] {
 }
 
 div.product-excerpt {
-  font-size: 1rem;
+  font-size: 16px;
 }
 
 .wd-product-meta strong,
@@ -347,7 +347,7 @@ body>div.website-wrapper>header>div>div.whb-row.whb-header-bottom.whb-sticky-row
 }
 
 .wd-dropdown-menu.wd-dropdown {
-  padding-bottom: 5rem !important;
+  padding-bottom: 80px !important;
   border-bottom: 5px solid var(--secondary-color) !important;
 }
 
@@ -800,7 +800,7 @@ body>div.website-wrapper>header>div>div.whb-row.whb-header-bottom.whb-sticky-row
   font-weight: 700;
   padding: 7px 15px;
   border-radius: 5px;
-  font-size: 1rem;
+  font-size: 16px;
   min-width: 0;
   box-sizing: border-box;
   text-align: center;
@@ -1353,7 +1353,7 @@ body>div.website-wrapper>header>div>div.whb-row.whb-general-header.whb-sticky-ro
 .my-title-row .product-title {
   flex: 1 1 auto;
   margin: 0;
-  font-size: 1.3rem;
+  font-size: 20.8px;
 }
 
 div.product-excerpt {
@@ -1393,7 +1393,7 @@ div.product-excerpt {
 }
 
 .pagination-pagination {
-  gap: 1rem;
+  gap: 16px;
 }
 
 .product-carrousel .owl-item .owl-carousel-item .product-wrapper .product-element-bottom .product-brand,
@@ -2246,7 +2246,7 @@ div>div>div>div.cart-totals-section.cart-collaterals>div>div>table>tbody>tr>th,
 }
 
 .cart-content-wrapper {
-  margin-bottom: 2rem;
+  margin-bottom: 32px;
 }
 
 table>tbody>tr>td.product-subtotal {
@@ -2573,7 +2573,7 @@ table.variations tr.size-label-row th {
   text-align: left;
   padding: 10px 0 6px;
   font-weight: 700;
-  font-size: 1rem;
+  font-size: 16px;
   vertical-align: middle;
   border: none;
 }
@@ -2686,7 +2686,7 @@ div.col-lg-6.wd-product-summary-col>div>div.wd-add-to-cart-wrap>form>table {
 .wd-variations-boxes .size-label-row {
   font-weight: 700;
   margin-bottom: 10px;
-  font-size: 1rem;
+  font-size: 16px;
   color: #111;
 }
 
@@ -3624,7 +3624,7 @@ div.owl-stage-outer>div>div>div>li>div>div.product-element-bottom>div.product-ct
 
 div.owl-stage-outer>div>div>div>li>div>div.product-element-bottom>div.product-cta-row>div>div>del>span {
   color: #9ca3af;
-  font-size: 0.85rem;
+  font-size: 13.6px;
   font-weight: 500;
   text-decoration: line-through;
   opacity: 0.9;
@@ -4148,7 +4148,7 @@ div.wd-product-top.container>div>div.col-lg-6.wd-product-summary-col>div>div.wd-
 }
 
 .site-content p {
-  font-size: 1rem;
+  font-size: 16px;
 }
 
 .wd-event-hover:hover>.wd-dropdown {
@@ -4908,7 +4908,7 @@ body>div.website-wrapper>header>div>div.whb-row.whb-top-bar.whb-not-sticky-row.w
       border-radius: 8px !important;
       font-weight: 900 !important;
       box-shadow: none !important;
-      font-size: 0.8rem !important;
+      font-size: 12.8px !important;
   }
 }
 
@@ -5906,4 +5906,100 @@ fill='none' stroke='%2329b0c2' stroke-width='1.5'/>\
   width: auto !important;
   max-width: none !important;
   margin: 0 !important;
+}
+
+/* ==========================================================================
+   Woodmart 8.6 — mobile product card and header
+   Note: Woodmart 8.6 sets the root font size to the theme's text size
+   (html { font-size: var(--wd-text-font-size) }, 12px here) instead of the
+   browser's 16px, so sizes in this file are in px, not rem.
+   ========================================================================== */
+
+/* The card's inner wrapper fills the card, as in production (Woodmart 8
+   adds side margins to it in product grids). */
+.wd-product > .wd-product-wrapper.product-wrapper {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Quantity box: one 32px row. On mobile its parent is a flex column, so the
+   "flex: 0 0 82px" written above for the desktop row (82px wide) turned
+   into 82px of height. */
+.wd-product .product-cta .quantity {
+  flex: 0 0 auto !important;
+  height: 32px !important;
+  min-height: 0 !important;
+  align-self: center !important;
+}
+
+@media (max-width: 768px) {
+  .wd-product .product-cta .quantity {
+    width: 100% !important;
+  }
+
+  /* Home sliders: button width as in production (96px). */
+  .wd-carousel .wd-product .wd-add-btn-replace > .button {
+    flex: 0 0 auto !important;
+    min-width: 96px !important;
+  }
+}
+
+/* Shop and category cards, as in production: 96x37 button, price pill with
+   20px side padding, and a 98px quantity box beside the button on desktop.
+   The 30px rules above are meant for the home sliders. */
+.products[data-source="main_loop"] .wd-product .wd-add-btn-replace > .button {
+  flex: 0 0 auto !important;
+  min-width: 96px !important;
+  height: 37px !important;
+  min-height: 37px !important;
+  padding: 6px 12px !important;
+}
+
+@media (max-width: 768px) {
+  .products[data-source="main_loop"] .wd-product .woocommerce-Price-amount {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .products[data-source="main_loop"] .wd-product .product-cta .quantity {
+    flex: 0 0 98px !important;
+    width: 98px !important;
+  }
+}
+
+.wd-product .product-cta .quantity .minus,
+.wd-product .product-cta .quantity .plus {
+  display: block !important;
+}
+
+/* Text size of the price and button row, as in production (Woodmart 8
+   scales the card text down on mobile). */
+.wd-product .product-cta {
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* Mobile header "Entrar / Registar" pill. Woodmart 8.6 migrated this
+   element from .wd-design-7.wd-account-style-text to
+   .wd-design-1-text.wd-style-text-only, so the old selector stopped matching. */
+@media (max-width: 1024px) {
+  .whb-mobile-right .wd-header-my-account.whb-5wb5e34ek6n1w9k7brjz {
+    background-color: var(--secondary-color);
+    border-radius: 20px;
+    height: 40px;
+  }
+
+  .whb-mobile-right .wd-header-my-account.whb-5wb5e34ek6n1w9k7brjz > a {
+    height: 40px;
+    padding: 0 10px;
+  }
+
+  .whb-mobile-right .wd-header-my-account.whb-5wb5e34ek6n1w9k7brjz .wd-tools-text {
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
 }
