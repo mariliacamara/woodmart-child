@@ -6003,3 +6003,19 @@ fill='none' stroke='%2329b0c2' stroke-width='1.5'/>\
     text-transform: uppercase;
   }
 }
+
+/* Shop and category cards: image area as in production (189px on desktop,
+   120px on mobile). An older 220px rule now matches Woodmart 8's markup. */
+.products[data-source="main_loop"] .wd-product .product-image-link {
+  height: 189px !important;
+}
+
+@media (max-width: 768px) {
+  .products[data-source="main_loop"] .wd-product .product-image-link {
+    height: 120px !important;
+  }
+
+  .products[data-source="main_loop"] .wd-product > .wd-product-wrapper {
+    margin-top: 0 !important;
+  }
+}
