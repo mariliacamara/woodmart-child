@@ -186,7 +186,9 @@ do_action( 'woocommerce_before_shop_loop_item' );
 											'aria-label'       => $product->add_to_cart_description(),
 											'rel'              => 'nofollow',
 										) ),
-										esc_html__( 'Comprar', 'zincomed-child' )
+										// As in production: "Comprar" on the product page (related
+										// products), "Adicionar" in every other product list.
+										is_singular( 'product' ) ? esc_html__( 'Comprar', 'zincomed-child' ) : esc_html__( 'Adicionar', 'zincomed-child' )
 									),
 									$product,
 									$product->get_id()

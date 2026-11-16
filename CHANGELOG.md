@@ -20,6 +20,13 @@ produção e com a correção de 21/10.
 
 ### Fixed
 
+- Cards de produto da home, das categorias e da busca voltaram a usar o card
+  da Zincomed (selos de desconto, fundo branco, borda e botão da produção):
+  o `woocommerce/content-product.php` antigo, que o 2.0.0 queria remover para
+  deixar o Woodmart montar o loop, tinha ficado no repositório e passava à
+  frente do card novo.
+- Texto do botão do card como na produção: "Comprar" na página de produto
+  (relacionados) e "Adicionar" nas outras listas.
 - Carrossel de imagens do WPBakery (banner principal da home, desktop e
   mobile) desenhado com o carrossel do próprio Woodmart. No Woodmart 8.6 o
   modelo padrão do WPBakery ficava vazio, porque depende de estilos que o
