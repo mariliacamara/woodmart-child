@@ -8,13 +8,24 @@ e o projeto usa [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
-### Added
+## [2.1.0] - 2026-11-16
+
+Alinha a linha 2.x (Woodmart 8.x) com as versões 1.0.2 e 1.0.3 publicadas na
+produção e com a correção de 21/10.
 
 ### Changed
 
+- Texto de entrega da página de produto: "Entrega em 1 a 5 dias úteis para
+  Portugal Continental." (era a alteração 1.0.3 da produção).
+
 ### Fixed
 
-### Removed
+- Links "Comprar" dos produtos relacionados montados a partir do link do
+  próprio produto, sem herdar os parâmetros do endereço da página atual
+  (alteração 1.0.2 da produção).
+- Logótipo da marca na página de produto: a meta `image` da marca como array
+  sem `id`, ou com outro tipo, já não chega ao `esc_url_raw()` e não causa
+  erro 500 (mesma correção aplicada na produção a 21/10).
 
 ## [2.0.13] - 2026-09-05
 
