@@ -26,6 +26,18 @@ produção e com a correção de 21/10.
 
 ### Fixed
 
+- Cards da loja e das categorias com as medidas da produção (imagem,
+  quantidade, preço e botão), no desktop e no mobile; o Woodmart 8.6 passou
+  a base de letra da página para 12px, por isso os tamanhos do tema estão
+  agora em px em vez de rem.
+- Mobile: botão "Entrar / Registar" com fundo, carrosséis de produtos com
+  setas em triângulo e bolinhas em pílula, e etiquetas da tabela do
+  carrinho em maiúsculas.
+- Página de produto: nome do produto no fim do caminho de navegação, títulos
+  das abas em maiúsculas e "−/+" da quantidade a branco.
+- Carrinho: opções de envio alinhadas à direita.
+- Checkout: "(opcional)" do tamanho e cor do rótulo, "Enviar para uma
+  morada diferente?" a preto e aviso de cupão numa linha.
 - Grelha da loja e das categorias com 3 colunas no desktop e 2 no mobile,
   como definido no tema: regras antigas em flex encolhiam os cards para 5
   por linha no Woodmart 8.

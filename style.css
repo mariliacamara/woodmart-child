@@ -6019,3 +6019,131 @@ fill='none' stroke='%2329b0c2' stroke-width='1.5'/>\
     margin-top: 0 !important;
   }
 }
+
+/* ==========================================================================
+   Woodmart 8.6 — carousels, product page, cart and checkout details
+   The rules for these elements above target Woodmart 7 / Owl Carousel
+   markup (.owl-prev, .owl-dots, input.minus...), which Woodmart 8 replaced.
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  /* Carousel arrows as teal triangles, as production drew the Owl arrows. */
+  .wd-btn-arrow .wd-arrow-inner {
+    display: none !important;
+  }
+
+  .wd-btn-arrow.wd-prev::after,
+  .wd-btn-arrow.wd-next::after {
+    content: "";
+    display: block;
+    width: 0;
+    height: 0;
+    border-top: 16px solid transparent;
+    border-bottom: 16px solid transparent;
+  }
+
+  .wd-btn-arrow.wd-prev::after {
+    border-right: 22px solid #20b7c9;
+  }
+
+  .wd-btn-arrow.wd-next::after {
+    border-left: 22px solid #20b7c9;
+  }
+
+  /* Side margin so the arrows sit beside the cards, not over them. */
+  .wd-products-element.wd-carousel-container {
+    padding-left: 22px;
+    padding-right: 22px;
+  }
+
+  .wd-products-element .wd-nav-arrows .wd-btn-arrow.wd-prev {
+    left: -22px !important;
+  }
+
+  .wd-products-element .wd-nav-arrows .wd-btn-arrow.wd-next {
+    right: -22px !important;
+  }
+
+  /* Product carousel dots: shown on mobile, as grey pills with the active
+     one in the secondary colour. */
+  .wd-products-element .wd-nav-pagin-wrap.wd-hide-sm {
+    display: block !important;
+  }
+
+  .wd-products-element .wd-nav-pagin {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+  }
+
+  .wd-products-element .wd-nav-pagin-item span {
+    display: block;
+    width: 35px !important;
+    height: 6px !important;
+    border: none !important;
+    border-radius: 10px !important;
+    background-color: #d9d9d9 !important;
+  }
+
+  .wd-products-element .wd-nav-pagin-item.wd-active span {
+    background-color: var(--secondary-color) !important;
+  }
+
+  /* Cart table labels on mobile, as in production. */
+  .woocommerce-cart .woocommerce-cart-form .shop_table_responsive td::before {
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 11px;
+  }
+}
+
+/* Product page: the current product closes the breadcrumbs. */
+.single-product .wd-breadcrumbs .wd-last,
+.single-product .wd-breadcrumbs .wd-last-link + .wd-delimiter {
+  display: inline !important;
+}
+
+/* Product page tabs and accordion titles in capitals. */
+.single-product .wd-accordion-title-text {
+  text-transform: uppercase;
+}
+
+/* Product page quantity: WooCommerce now prints <button> for - and +. */
+form.cart .quantity :is(button.minus, button.plus) {
+  color: #fff !important;
+  font-size: 14px !important;
+}
+
+/* Cart shipping options aligned right, radio after the text. */
+.woocommerce-cart #shipping_method li {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 6px;
+  text-align: right;
+}
+
+.woocommerce-cart #shipping_method li label {
+  text-align: right;
+}
+
+/* Checkout: "(opcional)" in the label's own size and colour, the
+   "different address" option in plain black, and the coupon notice on one
+   line. */
+.woocommerce-checkout .form-row label .optional {
+  font-size: inherit !important;
+  color: inherit !important;
+  vertical-align: baseline !important;
+  top: 0 !important;
+}
+
+.woocommerce-checkout #ship-to-different-address label,
+.woocommerce-checkout #ship-to-different-address label span {
+  color: #000 !important;
+  font-weight: 400 !important;
+}
+
+.woocommerce-checkout .woocommerce-form-coupon-toggle .woocommerce-info {
+  display: block !important;
+}
