@@ -18,8 +18,17 @@ produção e com a correção de 21/10.
 - Texto de entrega da página de produto: "Entrega em 1 a 5 dias úteis para
   Portugal Continental." (era a alteração 1.0.3 da produção).
 
+### Changed
+
+- CSS e JavaScript do tema passam a ser versionados pela data do ficheiro
+  (`2.1.0.<mtime>`): cada deploy muda o endereço e a Cloudflare deixa de
+  servir a cópia anterior.
+
 ### Fixed
 
+- Grelha da loja e das categorias com 3 colunas no desktop e 2 no mobile,
+  como definido no tema: regras antigas em flex encolhiam os cards para 5
+  por linha no Woodmart 8.
 - Cards de produto da home, das categorias e da busca voltaram a usar o card
   da Zincomed (selos de desconto, fundo branco, borda e botão da produção):
   o `woocommerce/content-product.php` antigo, que o 2.0.0 queria remover para

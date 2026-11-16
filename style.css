@@ -5888,3 +5888,22 @@ fill='none' stroke='%2329b0c2' stroke-width='1.5'/>\
     height: auto;
   }
 }
+
+/* ==========================================================================
+   Woodmart 8.6 — shop and category grid
+   Woodmart 8 lays out the main loop as a CSS grid (--wd-col-lg/md/sm from
+   the theme options: 3 columns, 2 on mobile). Older flex rules above turned
+   it back into a flex row, so cards shrank to fit five per row. Restore the
+   grid and keep the production card width and gap (294px cards, 16px gap).
+   ========================================================================== */
+.products.wd-grid-g[data-source="main_loop"] {
+  display: grid !important;
+  grid-template-columns: repeat(var(--wd-col, 3), minmax(0, 1fr)) !important;
+  gap: 16px !important;
+}
+
+.products.wd-grid-g[data-source="main_loop"] > .wd-product {
+  width: auto !important;
+  max-width: none !important;
+  margin: 0 !important;
+}

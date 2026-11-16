@@ -9,6 +9,20 @@ if ( ! defined( 'ZINCOMED_CHILD_VERSION' ) ) {
   define( 'ZINCOMED_CHILD_VERSION', wp_get_theme()->get( 'Version' ) ?: '2.0.13' );
 }
 
+/**
+ * Version for a child theme asset: the theme version plus the file's
+ * modification time, so every deploy gives the CSS and JS a new URL and
+ * Cloudflare or the browser never keep serving the previous copy.
+ *
+ * @param string $relative_path Path inside the child theme, starting with "/".
+ * @return string
+ */
+function zincomed_child_asset_version( $relative_path ) {
+  $file = get_stylesheet_directory() . $relative_path;
+
+  return file_exists( $file ) ? ZINCOMED_CHILD_VERSION . '.' . filemtime( $file ) : ZINCOMED_CHILD_VERSION;
+}
+
 add_action( 'after_setup_theme', function () {
   load_child_theme_textdomain( 'zincomed-child', get_stylesheet_directory() . '/languages' );
 } );
@@ -18,7 +32,7 @@ add_action( 'wp_enqueue_scripts', function () {
     'zincomed-child',
     get_stylesheet_uri(),
     array( 'woodmart-style' ),
-    ZINCOMED_CHILD_VERSION
+    zincomed_child_asset_version( '/style.css' )
   );
 }, 10002 );
 
@@ -84,7 +98,7 @@ function zincomed_child_scripts() {
 		'zincomed-cat-toggle',
 		get_stylesheet_directory_uri() . '/js/categories-fix.js',
 		array( 'jquery' ),
-		ZINCOMED_CHILD_VERSION,
+		zincomed_child_asset_version( '/js/categories-fix.js' ),
 		true
 	);
 
@@ -92,7 +106,7 @@ function zincomed_child_scripts() {
 		'zincomed-platform-classes',
 		get_stylesheet_directory_uri() . '/assets/js/platform-classes.js',
 		array(),
-		ZINCOMED_CHILD_VERSION,
+		zincomed_child_asset_version( '/assets/js/platform-classes.js' ),
 		false
 	);
 }
@@ -135,7 +149,7 @@ add_action( 'wp_enqueue_scripts', function () {
     'woodmart-autoupdate-cart',
     get_stylesheet_directory_uri() . '/assets/js/autoupdate-cart.js',
     array(), 
-    ZINCOMED_CHILD_VERSION,
+    zincomed_child_asset_version( '/assets/js/autoupdate-cart.js' ),
     true
   );
 }, 20 );
@@ -161,7 +175,7 @@ add_action( 'wp_enqueue_scripts', function () {
       'woodmart-child-loop-qty',
       get_stylesheet_directory_uri() . '/assets/js/loop-qty.js',
       array( 'jquery' ),
-      ZINCOMED_CHILD_VERSION,
+      zincomed_child_asset_version( '/assets/js/loop-qty.js' ),
       true
     );
   }
@@ -172,7 +186,7 @@ add_action( 'wp_enqueue_scripts', function () {
       'woodmart-child-single-product-qty',
       get_stylesheet_directory_uri() . '/assets/js/single-product-qty.js',
       array(),
-      ZINCOMED_CHILD_VERSION,
+      zincomed_child_asset_version( '/assets/js/single-product-qty.js' ),
       true
     );
 
@@ -180,7 +194,7 @@ add_action( 'wp_enqueue_scripts', function () {
       'zincomed-product-variation-boxes',
       get_stylesheet_directory_uri() . '/assets/js/product-variation-boxes.js',
       array(),
-      ZINCOMED_CHILD_VERSION,
+      zincomed_child_asset_version( '/assets/js/product-variation-boxes.js' ),
       true
     );
   }
@@ -192,7 +206,7 @@ add_action( 'wp_enqueue_scripts', function () {
 		'product-cards',
 		get_stylesheet_directory_uri() . '/assets/js/product-cards.js',
 		array(),
-		ZINCOMED_CHILD_VERSION,
+		zincomed_child_asset_version( '/assets/js/product-cards.js' ),
 		true
 	);
 
