@@ -291,3 +291,21 @@ add_filter( 'gettext_woodmart', function ( $translation, $text ) {
 
 	return $translation;
 }, 10, 2 );
+
+/**
+ * H1 da home no logo do cabeçalho do telemóvel (header-elements/logo.php).
+ *
+ * Devolve o texto do H1 quando o logo indicado deve levar o H1, ou '' nos
+ * outros casos. Só um logo leva o H1: o do telemóvel, porque o Google indexa
+ * a versão de telemóvel. O id é o do elemento no construtor de cabeçalhos
+ * ("Header Base (Copy)"); se o cabeçalho for recriado, atualizar aqui.
+ *
+ * @param string $element_id Id do elemento logo no construtor de cabeçalhos.
+ * @return string
+ */
+function zincomed_logo_h1_text( $element_id ) {
+	if ( ! is_front_page() || 'lt7vdqgaccmapftzurvt' !== $element_id ) {
+		return '';
+	}
+	return 'Zincomed: Produtos de Saúde, Enfermagem e Geriatria para Casa e Profissionais';
+}
