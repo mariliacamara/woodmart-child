@@ -267,3 +267,27 @@ add_filter( 'woocommerce_product_add_to_cart_url', function ( $url, $product ) {
 
 	return add_query_arg( 'add-to-cart', $product->get_id(), get_permalink( $product->get_id() ) );
 }, 20, 2 );
+
+/**
+ * Woodmart 8 mudou alguns textos e a tradução pt_PT (feita no Loco Translate)
+ * ainda tem os antigos, por isso estes apareciam em inglês: a mensagem do
+ * popup "adicionado ao carrinho" e alguns rótulos de acessibilidade.
+ */
+add_filter( 'gettext_woodmart', function ( $translation, $text ) {
+	static $map = array(
+		'Product was successfully added to your cart.' => 'O seu produto foi adicionado ao carrinho com sucesso.',
+		'Clear search'                                  => 'Limpar pesquisa',
+		'Clear search button'                           => 'Botão para limpar a pesquisa',
+		'Next slide'                                    => 'Diapositivo seguinte',
+		'Previous slide'                                => 'Diapositivo anterior',
+		'Shopping cart sidebar'                         => 'Carrinho de compras lateral',
+		'Toggle wishlist'                               => 'Adicionar ou remover dos favoritos',
+		'Wishlist products'                             => 'Produtos favoritos',
+	);
+
+	if ( $translation === $text && isset( $map[ $text ] ) ) {
+		return $map[ $text ];
+	}
+
+	return $translation;
+}, 10, 2 );

@@ -8,6 +8,15 @@ e o projeto usa [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [2.1.8] - 2026-11-25
+
+### Fixed
+
+- Textos em inglês que o Woodmart 8 mudou e que a tradução pt_PT ainda não
+  tinha: a mensagem do popup "adicionado ao carrinho" e os rótulos "Clear
+  search", "Next/Previous slide", "Shopping cart sidebar", "Toggle wishlist"
+  e "Wishlist products" (filtro `gettext_woodmart` no functions.php).
+
 ## [2.1.7] - 2026-11-24
 
 ### Changed
