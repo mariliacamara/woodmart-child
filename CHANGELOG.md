@@ -8,6 +8,105 @@ e o projeto usa [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [2.1.7] - 2026-11-24
+
+### Changed
+
+- Computador e tablet: 26px entre o cabeçalho e o conteúdo, como no
+  telemóvel (eram 40px). A home e a landing de marca continuam encostadas ao
+  menu.
+
+## [2.1.6] - 2026-11-24
+
+### Fixed
+
+- Telemóvel: o conteúdo das páginas (exceto a home) começava 66px abaixo do
+  cabeçalho, em vez de 26px. O Woodmart 8 passou os 40px de espaço da margem
+  do cabeçalho para o contentor do conteúdo, e somavam-se aos 26px que o tema
+  filho já punha no cabeçalho. Os 26px passam para o contentor.
+
+## [2.1.5] - 2026-11-24
+
+### Fixed
+
+- Espaço branco de 31px por baixo do menu (visível por cima do banner da
+  home e no topo das outras páginas). O cabeçalho fixo do Woodmart 8 reserva
+  a soma das alturas configuradas no construtor do cabeçalho, com a linha do
+  menu a 81px, mas a barra é desenhada com 50px. No computador, a variável
+  `--wd-header-bottom-h` passa a 50px.
+
+## [2.1.4] - 2026-11-24
+
+Landing de marca, etiquetas e cabeçalho no telemóvel como na produção.
+
+### Fixed
+
+- Landing de marca: 4 colunas no computador (o Woodmart 8 punha 3, num
+  `style` no próprio elemento) e sem os 40px por cima e os 15px de cada lado
+  que o contentor novo acrescenta.
+- Etiqueta "10% OFF | BLACK WEEK" inteira nos cartões do telemóvel (13px; a
+  16px ficava cortada).
+- Cabeçalho do telemóvel: menu, logótipo, "Entrar / Registar" e carrinho
+  cabem na linha (somavam 416px em 360px e o carrinho ficava cortado, também
+  na produção).
+
+## [2.1.3] - 2026-11-24
+
+Carrinho no telemóvel mais arrumado.
+
+### Changed
+
+- Avisos "foi adicionado ao seu carrinho" mais baixos e sem o "Ver carrinho".
+- Preço, quantidade e subtotal de cada produto empilhados (rótulo em cima,
+  valor por baixo, alinhados à esquerda): antes ficavam encostados à borda
+  direita do ecrã. O "×" de remover deixa de sair 7px para fora do ecrã.
+- Cupão antes do "Continuar a comprar", que passa a botão de contorno para
+  não competir com o "Finalizar compra".
+- Botões do carrinho com 42px de altura ("Finalizar compra" com 50px). Uma
+  regra antiga põe todos os botões da loja a 30px com !important.
+- Totais: "Subtotal" do tamanho de "Envio" e "Total", aviso das opções de
+  envio a 13px, total a 20px.
+
+## [2.1.2] - 2026-11-24
+
+"A minha conta" no Woodmart 8.6 igual à da produção.
+
+### Fixed
+
+- Computador: o conteúdo da conta aparecia por baixo do menu. O Woodmart 8
+  usa uma grelha de 12 colunas e uma regra antiga punha o conteúdo nas 12
+  (nos favoritos, só numa). Agora o menu fica à esquerda (199px) e o conteúdo
+  ao lado, como na produção.
+- Atalhos do painel: os ícones da Zincomed voltam ao quadrado cinzento (o
+  Woodmart 8 trocou os `div.*-link` por `li.wd-my-acc-*` e mostrava o seu
+  próprio ícone por baixo); sem o atalho "Sair", como na produção.
+- Menu lateral a 14px; textos do painel a 13,2px.
+- Botão de mostrar a senha turquesa com o olho a branco (estava transparente,
+  branco sobre branco), no login e em "Detalhes da conta".
+- Títulos do login e do registo em maiúsculas, a 22px.
+- Favoritos vazios: o texto ocupa a largura do conteúdo (estava numa coluna
+  de 72px no computador e 12px no telemóvel).
+
+## [2.1.1] - 2026-11-24
+
+Carrinho no Woodmart 8.6 igual ao da produção, e o botão "Continuar a
+comprar" no tamanho do "Aplicar cupão".
+
+### Fixed
+
+- "Continuar a comprar" (Buy Again) esticava até ao fim do aviso dos cupões
+  (91–111px de altura). Agora tem a altura do "Aplicar cupão" e fica alinhado
+  com o campo do cupão; no telemóvel ocupa a largura toda, como o "Aplicar
+  cupão".
+- Nome do produto a 14px, como na produção (estava a 12px).
+- Quantidade: -, número e + colados num só bloco cinzento.
+- Preço com desconto: antigo riscado a cinzento claro, novo a azul e em
+  negrito (as cores estavam trocadas).
+- "(com IVA)" do subtotal numa só linha no telemóvel.
+- Telemóvel: "Envio" e "Total" à esquerda, na linha do primeiro valor;
+  "Calcular custos de envio" alinhado à direita e com espaço por cima; sem a
+  linha em branco antes do "Economizou".
+
 ## [2.1.0] - 2026-11-16
 
 Alinha a linha 2.x (Woodmart 8.x) com as versões 1.0.2 e 1.0.3 publicadas na

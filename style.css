@@ -5,7 +5,7 @@ Author:     WPServeur
 Author URI: https://www.wpserveur.net
 Template:   woodmart
 Description: Child theme da Zincomed migrado para Woodmart 8.5.x.
-Version:    2.1.0
+Version:    2.1.7
 Text Domain: zincomed-child
 License:    GNU General Public License v2 or later
 */
@@ -6146,4 +6146,430 @@ form.cart .quantity :is(button.minus, button.plus) {
 
 .woocommerce-checkout .woocommerce-form-coupon-toggle .woocommerce-info {
   display: block !important;
+}
+
+/* ==========================================================================
+   Woodmart 8.6 — carrinho como na produção
+   ========================================================================== */
+/* Nome do produto no tamanho da produção. */
+.woocommerce-cart .woocommerce-cart-form .product-name a {
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* Quantidade: -, número e + colados num só bloco cinzento, como na
+   produção (o espaço entre eles vinha dos espaços em branco do HTML). */
+.woocommerce-cart .cart_item div.quantity {
+  font-size: 0;
+  background-color: var(--grey);
+}
+
+.woocommerce-cart .cart_item div.quantity :is(button.minus, button.plus, input.qty) {
+  margin: 0;
+}
+
+.woocommerce-cart .cart_item div.quantity input.qty {
+  min-height: 30px;
+  border: 0;
+}
+
+/* Preço com desconto (Woo Discount Rules): antigo riscado a cinzento claro,
+   novo a azul e em negrito. */
+.woocommerce-cart .cart_item .product-price :is(del, ins) .amount {
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.woocommerce-cart .cart_item .product-price del .amount {
+  color: #bbb;
+  font-weight: 400;
+}
+
+.woocommerce-cart .cart_item .product-price ins .amount {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+/* "(com IVA)" do subtotal numa linha só. */
+.woocommerce-cart .woocommerce-cart-form td.product-subtotal .tax_label {
+  white-space: nowrap;
+}
+
+/* "Continuar a comprar" no tamanho do "Aplicar cupão", alinhado ao campo do
+   cupão em vez de esticado até ao fim do aviso. */
+.woocommerce-cart .woocommerce-cart-form .cart-actions {
+  align-items: flex-start;
+}
+
+.woocommerce-cart .woocommerce-cart-form .buy-again-continue-shopping {
+  align-self: flex-start;
+  height: 42px;
+  min-height: 42px;
+  margin: 0;
+}
+
+@media (max-width: 768.98px) {
+  /* No telemóvel, à largura toda e à altura do "Aplicar cupão". */
+  .woocommerce-cart .woocommerce-cart-form .buy-again-continue-shopping {
+    flex: 1 1 100%;
+    width: 100%;
+    height: 30px;
+    min-height: 30px;
+  }
+
+  /* Envio e Total: o rótulo à esquerda, na mesma linha do primeiro valor,
+     e o resto alinhado à direita. */
+  .woocommerce-cart .cart_totals tr.woocommerce-shipping-totals td {
+    display: block;
+    text-align: right;
+  }
+
+  .woocommerce-cart .cart_totals :is(tr.woocommerce-shipping-totals, tr.order-total) td::before {
+    display: block;
+    float: left;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .woocommerce-cart .cart_totals .woocommerce-shipping-destination {
+    margin: 10px 0;
+  }
+
+  .woocommerce-cart .cart_totals .woocommerce-shipping-calculator {
+    margin-top: 10px;
+  }
+
+  /* Total: o "(inclui … iva)" junto ao valor e o "Economizou" logo abaixo. */
+  .woocommerce-cart .cart_totals tr.order-total td {
+    display: block;
+    text-align: right;
+  }
+}
+
+/* ==========================================================================
+   Woodmart 8.6 — A minha conta como na produção
+   ========================================================================== */
+/* Títulos do login e do registo em maiúsculas. */
+.woocommerce-account .wd-login-title {
+  font-size: 22px;
+  text-transform: uppercase;
+}
+
+/* Botão de mostrar a senha: turquesa com o olho a branco (o Woodmart 8
+   deixava-o transparente, branco sobre branco). */
+.password-input .show-password-input {
+  background-color: var(--secondary-color) !important;
+  color: var(--white-color) !important;
+  border-radius: 0 5px 5px 0;
+}
+
+/* Menu lateral no tamanho da produção. */
+.woocommerce-MyAccount-navigation ul li a {
+  display: block;
+  padding: 10px 15px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+/* Textos do painel no tamanho da produção. */
+.woocommerce-account .woocommerce-MyAccount-content > p {
+  font-size: 13.2px;
+  line-height: 1.6;
+}
+
+/* Atalhos do painel: ícones da Zincomed no quadrado cinzento. O Woodmart 8
+   trocou os div.*-link por li.wd-my-acc-* e acrescentou um ícone próprio. */
+.wd-my-account-links.wd-nav-my-acc .wd-nav-icon,
+.wd-my-account-links.wd-nav-my-acc .wd-my-acc-customer-logout {
+  display: none !important;
+}
+
+.wd-my-account-links.wd-nav-my-acc .nav-link-text {
+  margin-top: 18px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.wd-my-account-links .wd-my-acc-orders a::before {
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 74.8 71.1'%3E%3Cpath stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='2.5' fill='none' d='M23,19.9l12.1-3.5c1.8-.5,3.7.5,4.2,2.4l3,10.7M56.4,48.6l-5-18.1c-.5-1.8-2.4-2.9-4.2-2.4l-20.3,5.8M37.5,54c.7,2.6-.8,5.3-3.3,6-2.6.7-5.2-.8-5.9-3.4-.7-2.6.8-5.3,3.3-6s5.2.8,5.9,3.4ZM31.6,50.6L21.4,14.2c-.7-2.4-3.1-3.8-5.5-3.1l-2.7.8M62.9,46.7l-25.4,7.2'/%3E%3C/svg%3E") !important;
+}
+
+.wd-my-account-links .wd-my-acc-downloads a::before {
+  background-image: url("assets/icons/download2.svg") !important;
+}
+
+.wd-my-account-links .wd-my-acc-edit-address a::before {
+  background-image: url("assets/icons/address2.svg") !important;
+}
+
+.wd-my-account-links .wd-my-acc-edit-account a::before {
+  background-image: url("assets/icons/account2.svg") !important;
+}
+
+.wd-my-account-links .wd-my-acc-wt-smart-coupon a::before {
+  background-image: url("assets/icons/coupon2.svg") !important;
+}
+
+.wd-my-account-links .wd-my-acc-wishlist a::before {
+  background-image: url("assets/icons/wishlist2.svg") !important;
+}
+
+.wd-my-account-links .wd-my-acc-wishlist a:hover::before {
+  background-image: url("assets/icons/wishlist1.svg") !important;
+}
+
+/* Favoritos: o conteúdo ficava numa só coluna da grelha (12px no
+   telemóvel). */
+body.is-wishlist-page .wd-my-account-wrapper > .woocommerce-MyAccount-content {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 1025px) {
+  /* Menu à esquerda e conteúdo ao lado. O Woodmart 8 usa uma grelha de 12
+     colunas e uma regra antiga punha o conteúdo nas 12 (ou só numa, nos
+     favoritos). */
+  :is(body.woocommerce-account, body.is-wishlist-page) .wd-my-account-wrapper.wd-grid-g {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  :is(body.woocommerce-account, body.is-wishlist-page) .wd-my-account-wrapper > .wd-my-account-sidebar {
+    flex: 0 0 230px;
+    max-width: 230px;
+    padding: 10px 30px 10px 0;
+  }
+
+  :is(body.woocommerce-account, body.is-wishlist-page) .wd-my-account-wrapper > .woocommerce-MyAccount-content {
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: none;
+    padding: 10px 30px;
+  }
+
+  /* Bloco vazio do WPBakery que ficava a ocupar uma coluna. */
+  :is(body.woocommerce-account, body.is-wishlist-page) .wd-my-account-wrapper > .wpb_text_column {
+    flex: 1 1 100%;
+  }
+}
+
+/* ==========================================================================
+   Carrinho no telemóvel: mais arrumado e com o "Finalizar compra" à vista
+   ========================================================================== */
+@media (max-width: 768.98px) {
+  /* Avisos "foi adicionado ao seu carrinho" mais compactos e sem o
+     "Ver carrinho" (já se está no carrinho). */
+  .woocommerce-cart .cart-content-wrapper .woocommerce-message {
+    min-height: 0;
+    margin-bottom: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .woocommerce-cart .cart-content-wrapper .woocommerce-message .button {
+    display: none;
+  }
+
+  /* Subtotal de cada produto na mesma linha que "Preço" e "Quantidade":
+     rótulo à esquerda, valor à direita e "(com IVA)" por baixo. */
+  .woocommerce-cart .woocommerce-cart-form td.product-subtotal {
+    width: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0 0;
+  }
+
+  .woocommerce-cart .woocommerce-cart-form td.product-subtotal .woocommerce-Price-amount {
+    min-width: 0;
+    padding: 6px 12px;
+    font-size: 15px;
+    border-radius: 5px;
+  }
+
+  .woocommerce-cart .woocommerce-cart-form td.product-subtotal .tax_label {
+    flex: 1 1 100%;
+    margin-top: 4px;
+    text-align: right;
+  }
+
+  /* Cupão primeiro, "Continuar a comprar" depois, como botão secundário
+     (contorno) para não competir com o "Finalizar compra". */
+  .woocommerce-cart .woocommerce-cart-form .cart-actions {
+    gap: 12px;
+  }
+
+  .woocommerce-cart .woocommerce-cart-form .wd-coupon-form {
+    order: 1;
+    padding: 16px;
+  }
+
+  .woocommerce-cart .woocommerce-cart-form .buy-again-continue-shopping {
+    order: 2;
+    height: 42px;
+    min-height: 42px !important;
+    background-color: transparent !important;
+    color: var(--primary-color) !important;
+    box-shadow: inset 0 0 0 2px var(--primary-color);
+  }
+
+  /* Uma regra antiga põe todos os botões da loja a 30px com !important;
+     no telemóvel os botões do carrinho ficam com 42px, mais fáceis de tocar. */
+  .woocommerce-cart .woocommerce-cart-form .wd-coupon-form [name="apply_coupon"] {
+    min-height: 42px !important;
+  }
+
+  /* Totais: tamanhos iguais entre rótulos, aviso do envio sem destaque e
+     "Finalizar compra" com altura de botão principal. */
+  .woocommerce-cart .cart_totals tr.cart-subtotal td::before {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .woocommerce-cart .cart_totals .woocommerce-shipping-destination {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+
+  .woocommerce-cart .cart_totals tr.order-total strong .amount {
+    font-size: 20px;
+  }
+
+  .woocommerce-cart .cart-content-wrapper > .cart_totals .checkout-button {
+    min-height: 50px !important;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 768.98px) {
+  /* Preço, quantidade e subtotal empilhados: rótulo em cima e valor por
+     baixo, alinhados à esquerda, longe da borda do ecrã. */
+  .woocommerce-cart .woocommerce-cart-form .cart_item td:is(.product-price, .product-quantity, .product-subtotal) {
+    display: block;
+    width: auto;
+    padding: 8px 0;
+    text-align: left !important;
+  }
+
+  .woocommerce-cart .woocommerce-cart-form .cart_item td:is(.product-price, .product-quantity, .product-subtotal)::before {
+    display: block;
+    float: none;
+    margin: 0 0 4px;
+    text-align: left;
+  }
+
+  .woocommerce-cart .woocommerce-cart-form .cart_item td.product-price .awdr_cart_strikeout_line,
+  .woocommerce-cart .woocommerce-cart-form .cart_item td.product-quantity div.quantity {
+    text-align: left;
+    margin: 0;
+  }
+
+  .woocommerce-cart .woocommerce-cart-form td.product-subtotal .woocommerce-Price-amount {
+    display: inline-block;
+    vertical-align: middle;
+  }
+
+  .woocommerce-cart .woocommerce-cart-form td.product-subtotal .tax_label {
+    display: inline-block;
+    margin: 0 0 0 8px;
+    vertical-align: middle;
+  }
+
+  /* O "×" de remover ficava 7px fora do ecrã. */
+  .woocommerce-cart .woocommerce-cart-form .cart_item td.product-remove {
+    right: 0;
+  }
+}
+
+/* ==========================================================================
+   Woodmart 8.6 — landing de marca, etiquetas e cabeçalho no telemóvel
+   ========================================================================== */
+/* Landing de marca: sem os 40px por cima nem os 15px de cada lado que o
+   contentor novo do Woodmart 8 acrescenta (o tema 7 anulava-os). */
+.wd-content-layout:has(> .zincomed-brand-landing) {
+  padding-top: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+/* Landing de marca no computador: 4 colunas, como na produção (o Woodmart 8
+   põe as colunas num style no próprio elemento). */
+@media (min-width: 1025px) {
+  .zincomed-brand-landing .wd-products.wd-grid-g {
+    --wd-col-lg: 4 !important;
+    row-gap: 24px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  /* Etiqueta "10% OFF | BLACK WEEK" inteira nos cartões estreitos. */
+  .product-grid-item .product-wrapper > .zincomed-discount-communication {
+    font-size: 13px !important;
+  }
+
+  /* Cabeçalho: menu, logótipo, "Entrar / Registar" e carrinho cabem nos
+     360px da linha (somavam 416px e o carrinho ficava cortado). */
+  .whb-general-header .whb-mobile-left .wd-header-mobile-nav > a {
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+
+  .whb-general-header .whb-mobile-left .site-logo {
+    width: auto;
+    max-width: 118px;
+  }
+
+  .whb-general-header .whb-mobile-left .site-logo img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .whb-general-header .whb-mobile-right .wd-header-my-account > a {
+    padding-left: 8px;
+    padding-right: 8px;
+    font-size: 11px;
+  }
+
+  .whb-general-header .whb-mobile-right .wd-header-cart > a {
+    padding-left: 6px;
+    padding-right: 0;
+  }
+}
+
+/* Cabeçalho fixo: o Woodmart 8 reserva por cima do conteúdo a soma das
+   alturas configuradas no construtor do cabeçalho (linha de baixo com 81px),
+   mas a barra do menu é desenhada com 50px; os 31px a mais apareciam como
+   espaço branco por cima do banner. */
+@media (min-width: 1025px) {
+  :root:root {
+    --wd-header-bottom-h: 50px;
+  }
+}
+
+/* Espaço entre o cabeçalho e o conteúdo. No Woodmart 7 era a margem de baixo
+   do cabeçalho (40px; 26px no telemóvel fora da home, regra acima). O
+   Woodmart 8 passou-o para o contentor do conteúdo (40px), e no telemóvel os
+   dois somavam 66px. */
+@media (max-width: 768px) {
+  body:not(.home):not(.front-page) .whb-header {
+    margin-bottom: 0;
+  }
+
+  body:not(.home):not(.front-page) .wd-content-layout {
+    padding-top: 26px;
+  }
+}
+
+/* Computador e tablet: o mesmo espaço de 26px do telemóvel entre o
+   cabeçalho e o conteúdo (eram 40px). A home e a landing de marca começam
+   encostadas ao menu e ficam como estão. */
+@media (min-width: 769px) {
+  body:not(.home):not(.front-page) .wd-content-layout:not(:has(> .zincomed-brand-landing)) {
+    padding-top: 26px;
+  }
 }
