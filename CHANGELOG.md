@@ -8,6 +8,8 @@ e o projeto usa [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [2.1.9] - 2026-11-26
+
 ### Added
 
 - H1 na home: o logo do cabeçalho do telemóvel fica dentro do `<h1>`, com
