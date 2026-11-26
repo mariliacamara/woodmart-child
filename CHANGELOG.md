@@ -8,6 +8,16 @@ e o projeto usa [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+## [2.1.9] - 2026-11-26
+
+### Added
+
+- H1 na home: o logo do cabeçalho do telemóvel fica dentro do `<h1>`, com
+  o texto "Zincomed: Produtos de Saúde, Enfermagem e Geriatria para Casa e
+  Profissionais" no alt da imagem. Um só H1 na página; o logo do computador
+  e as outras páginas ficam iguais (`header-elements/logo.php`, cópia do
+  WoodMart 8.6.7, e `zincomed_logo_h1_text()` no functions.php).
+
 ## [2.1.8] - 2026-11-25
 
 ### Fixed

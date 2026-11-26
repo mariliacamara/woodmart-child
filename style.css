@@ -5,7 +5,7 @@ Author:     WPServeur
 Author URI: https://www.wpserveur.net
 Template:   woodmart
 Description: Child theme da Zincomed migrado para Woodmart 8.5.x.
-Version:    2.1.8
+Version:    2.1.9
 Text Domain: zincomed-child
 License:    GNU General Public License v2 or later
 */
@@ -6572,4 +6572,11 @@ body.is-wishlist-page .wd-my-account-wrapper > .woocommerce-MyAccount-content {
   body:not(.home):not(.front-page) .wd-content-layout:not(:has(> .zincomed-brand-landing)) {
     padding-top: 26px;
   }
+}
+
+/* H1 da home à volta do logo do telemóvel: sem margens nem tamanho de título. */
+.zincomed-logo-h1 {
+	margin: 0;
+	font-size: inherit;
+	line-height: 0;
 }
